@@ -945,8 +945,7 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
             </button>
           </div>
           <div style="font-size:11px;color:var(--text3);margin-top:10px;line-height:1.6">
-            <strong>获取 Token：</strong>GitHub 右上角头像 → Settings → 左下角 Developer settings → Personal access tokens → Tokens (classic) → Generate new token → 勾选 <code style="background:var(--bg);padding:1px 5px;border-radius:4px">gist</code> 权限 → 生成后复制。<br>
-            直达链接：<a href="https://github.com/settings/tokens" target="_blank" style="color:var(--primary)">https://github.com/settings/tokens</a>
+            获取 Token：<a href="https://github.com/settings/tokens" target="_blank" style="color:var(--primary)">https://github.com/settings/tokens</a>（勾选 gist 权限）
           </div>
         </div>
       </div>
@@ -1683,13 +1682,13 @@ function renderChart(){
 
   svg+=`</svg>`;
 
-  // 图例放到 SVG 上方（互换位置后即在饼图下方）
-  let legendHtml='<div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:10px">';
+  // 图例放到 SVG 下方
+  let legendHtml='<div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:10px">';
   state.goals.forEach((g)=>{
     legendHtml+=`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#6B6558"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${g.color}"></span>${escapeHtml(g.name)}</span>`;
   });
   legendHtml+='</div>';
-  container.innerHTML=legendHtml+svg;
+  container.innerHTML=svg+legendHtml;
 }
 
 /* ===== 周报 Tab 渲染 ===== */
@@ -1716,6 +1715,14 @@ function renderWeekly(){
     const m=mins%60;
     return h>0?`${h}小时${m}分钟`:`${m}分钟`;
   };
+  // 数值显示用：单位小字号不加粗
+  const unit='<span style="font-size:13px;font-weight:400;color:var(--text3)">';
+  const formatDurationVal=(mins)=>{
+    const h=Math.floor(mins/60);
+    const m=mins%60;
+    if(h>0) return `${h}${unit}小时</span>${m>0?` ${m}${unit}分钟</span>`:''}`;
+    return `${m}${unit}分钟</span>`;
+  };
 
   const totalDays=daysBetween(monday,sunday)+1;
   const avgMinutesPerDay=summary.checkinDays>0?Math.round(summary.totalMinutes/summary.checkinDays):0;
@@ -1731,12 +1738,12 @@ function renderWeekly(){
 
   document.getElementById('weeklySummary').innerHTML=`
     <div class="summary-card">
-      <div class="sc-val">${formatDuration(summary.totalMinutes)}</div>
+      <div class="sc-val">${formatDurationVal(summary.totalMinutes)}</div>
       <div class="sc-label">总专注时长</div>
       <div class="sc-compare ${totalMinCompare.cls}">环比增长量 ${totalMinCompare.text}</div>
     </div>
     <div class="summary-card">
-      <div class="sc-val">${avgMinutesPerDay} <span style="font-size:13px;font-weight:400;color:var(--text3)">分钟</span></div>
+      <div class="sc-val">${formatDurationVal(avgMinutesPerDay)}</div>
       <div class="sc-label">日均时长</div>
       <div class="sc-compare ${compare(avgMinutesPerDay,lastAvgMinutes).cls}">环比增长量 ${compare(avgMinutesPerDay,lastAvgMinutes).text}</div>
     </div>
@@ -2138,9 +2145,25 @@ function openGoalModal(goalId){
               <input type="text" id="goalUnit" placeholder="个 / 页 / 节" value="${goal?escapeHtml(goal.unit):''}">
             </div>
           </div>
-          <div class="form-group">
-            <label>截止日期</label>
-            <input type="date" id="goalDeadline" value="${goal?goal.deadline:todayStr()}">
+          <div class="form-row">
+            <div class="form-group">
+              <label>预计划</label>
+              <div style="position:relative">
+                <select id="goalPlan" onchange="applyPlan(this.value);togglePlanPlaceholder()">
+                  <option value="7">1周后</option>
+                  <option value="30">1个月后</option>
+                  <option value="182">半年后</option>
+                  <option value="365">1年后</option>
+                  <option value="custom">自定义</option>
+                </select>
+                <span id="planPlaceholder" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#bbb;pointer-events:none;font-size:14px">1周后/1个月后/自定义</span>
+              </div>
+              <input type="number" id="goalCustomDays" placeholder="自定义天数" min="1" style="display:none;margin-top:6px" oninput="applyPlan('custom')">
+            </div>
+            <div class="form-group">
+              <label>截止日期</label>
+              <input type="date" id="goalDeadline" value="${goal?goal.deadline:todayStr()}">
+            </div>
           </div>
           <div class="form-group">
             <label>配色</label>
@@ -2164,11 +2187,34 @@ function openGoalModal(goalId){
     </div>
   `;
   document.getElementById('modalContainer').innerHTML=html;
+  const planSel=document.getElementById('goalPlan');
+  if(planSel) planSel.selectedIndex=-1;
 }
 
 function selectColor(el){
   document.querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('selected'));
   el.classList.add('selected');
+}
+
+// 预计划：选择后自动计算截止日期
+function applyPlan(val){
+  const customInput=document.getElementById('goalCustomDays');
+  let days=0;
+  if(val==='custom'){
+    customInput.style.display='block';
+    days=parseInt(customInput.value)||0;
+  }else{
+    customInput.style.display='none';
+    days=parseInt(val)||0;
+  }
+  if(days>0){
+    document.getElementById('goalDeadline').value=addDays(todayStr(),days);
+  }
+}
+function togglePlanPlaceholder(){
+  const sel=document.getElementById('goalPlan');
+  const ph=document.getElementById('planPlaceholder');
+  if(ph) ph.style.display=sel.value?'none':'block';
 }
 
 function saveGoal(){
