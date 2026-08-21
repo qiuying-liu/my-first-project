@@ -120,6 +120,8 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
 .page-header h2{font-size:22px;font-weight:700}
 .page-header .subtitle{font-size:13px;color:var(--text2);margin-top:2px}
+.btn-icon{width:38px;height:38px;padding:0;border-radius:10px;border:1.5px solid var(--border);background:var(--card);color:var(--text);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .2s}
+.btn-icon:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-1px)}
 
 /* ===== 按钮 ===== */
 .btn{
@@ -282,7 +284,8 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 .week-nav svg{width:18px;height:18px}
 .week-label{font-size:15px;font-weight:600;min-width:160px;text-align:center}
 
-.weekly-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.weekly-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:900px){.weekly-summary{grid-template-columns:repeat(2,1fr)}}
 .summary-card{background:var(--card);border-radius:var(--radius);padding:16px 20px;text-align:left;box-shadow:var(--shadow-sm);border:1px solid var(--border-light)}
 .summary-card .sc-val{font-size:22px;font-weight:700;background:var(--primary-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .summary-card .sc-label{font-size:12px;color:var(--text2);margin-top:4px}
@@ -290,8 +293,8 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 /* 周报图表行：饼图 + 热力图 并排 */
 .weekly-charts-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
 @media(max-width:900px){.weekly-charts-row{grid-template-columns:1fr}}
-/* 周报分析行：14天趋势图 + 右侧文本框 */
-.weekly-analysis-row{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;margin-top:20px}
+/* 周报分析行：14天趋势图（左）+ 问题复盘/下周预案（右，上下排列） */
+.weekly-analysis-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
 @media(max-width:900px){.weekly-analysis-row{grid-template-columns:1fr}}
 .weekly-text-col{display:flex;flex-direction:column;gap:16px}
 .weekly-text-box{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow-sm);border:1px solid var(--border-light);display:flex;flex-direction:column;flex:1}
@@ -772,6 +775,9 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
           <h2>今日目标</h2>
           <div class="subtitle" id="todayDate"></div>
         </div>
+        <button class="btn-icon" onclick="openGoalModal()" title="添加新的学习目标">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="4" fill="#fff" stroke="#A39E91" stroke-width="2"/><line x1="12" y1="7" x2="12" y2="17" stroke="#A39E91" stroke-width="2.5"/><line x1="7" y1="12" x2="17" y2="12" stroke="#A39E91" stroke-width="2.5"/></svg>
+        </button>
       </div>
       <div id="todayList"></div>
       <div style="text-align:center;margin-top:40px">
@@ -817,27 +823,7 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
       <!-- 1. 数据汇总 -->
       <div class="weekly-summary" id="weeklySummary"></div>
 
-      <!-- 2. 近14天趋势（左）+ 问题复盘/下周预案（右） -->
-      <div class="weekly-analysis-row">
-        <div class="chart-card">
-          <div class="chart-header">
-            <span class="chart-title">近14天专注时长趋势</span>
-          </div>
-          <div id="chartContainer"></div>
-        </div>
-        <div class="weekly-text-col">
-          <div class="weekly-text-box">
-            <h4><span class="note-icon" style="background:#F7EEEE;color:#C47B7B">!</span>问题复盘</h4>
-            <textarea id="weeklyProblem" placeholder="本周遇到了什么问题？写下来..." oninput="saveWeeklyNote(this.value)"></textarea>
-          </div>
-          <div class="weekly-text-box">
-            <h4><span class="note-icon" style="background:#F7F2E8;color:#C9A96E">★</span>下周预案</h4>
-            <textarea id="weeklyNextPlan" placeholder="下周打算怎么改进？..." oninput="saveWeeklyNote(this.value)"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3. 时长分布 + 专注热力图 -->
+      <!-- 2. 时长分布 + 专注热力图 -->
       <div class="weekly-charts-row">
         <div class="chart-card">
           <div class="chart-header">
@@ -859,6 +845,26 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
             <span class="chart-title">近30天专注热力图</span>
           </div>
           <div id="heatmapContainer" class="heatmap-container"></div>
+        </div>
+      </div>
+
+      <!-- 3. 近14天趋势（左）+ 问题复盘/下周预案（右，上下排列） -->
+      <div class="weekly-analysis-row">
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">近14天专注时长趋势</span>
+          </div>
+          <div id="chartContainer"></div>
+        </div>
+        <div class="weekly-text-col">
+          <div class="weekly-text-box">
+            <h4><span class="note-icon" style="background:#F7EEEE;color:#C47B7B">!</span>问题复盘</h4>
+            <textarea id="weeklyProblem" placeholder="本周遇到了什么问题？写下来..." oninput="saveWeeklyNote(this.value)"></textarea>
+          </div>
+          <div class="weekly-text-box">
+            <h4><span class="note-icon" style="background:#F7F2E8;color:#C9A96E">★</span>下周预案</h4>
+            <textarea id="weeklyNextPlan" placeholder="下周打算怎么改进？..." oninput="saveWeeklyNote(this.value)"></textarea>
+          </div>
         </div>
       </div>
     </section>
@@ -917,7 +923,7 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
           <p style="font-size:12px;color:var(--text2);margin-bottom:12px">数据加密存储在你的 GitHub 私密 Gist 中，手机和电脑通过同一 Token + Gist ID 同步。Token 只存在本机浏览器，不会上传。</p>
           <div class="form-group">
             <label>GitHub Personal Access Token</label>
-            <input type="password" id="cloudToken" placeholder="ghp_xxxxxxxxxxxx" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:9px;font-size:14px;background:var(--card)" oninput="saveCloudToken(this.value)">
+            <input type="text" id="cloudToken" placeholder="ghp_xxxxxxxxxxxx" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:9px;font-size:14px;background:var(--card);font-family:monospace" oninput="saveCloudToken(this.value)">
           </div>
           <div class="form-group">
             <label>Gist ID <span class="optional" style="font-weight:400;color:var(--text3);font-size:11px">首次上传留空，自动创建</span></label>
@@ -925,6 +931,10 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
           </div>
           <div id="cloudStatus" style="font-size:12px;color:var(--text3);margin-bottom:10px">未同步</div>
           <div class="btn-row">
+            <button class="btn btn-outline btn-sm" onclick="testCloudToken()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              测试连接
+            </button>
             <button class="btn btn-primary btn-sm" onclick="uploadToCloud()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
               上传到云端
@@ -935,7 +945,8 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
             </button>
           </div>
           <div style="font-size:11px;color:var(--text3);margin-top:10px;line-height:1.6">
-            <strong>获取 Token：</strong>GitHub 右上角头像 → Settings → 左下角 Developer settings → Personal access tokens → Tokens (classic) → Generate new token → 勾选 <code style="background:var(--bg);padding:1px 5px;border-radius:4px">gist</code> 权限 → 生成后复制。
+            <strong>获取 Token：</strong>GitHub 右上角头像 → Settings → 左下角 Developer settings → Personal access tokens → Tokens (classic) → Generate new token → 勾选 <code style="background:var(--bg);padding:1px 5px;border-radius:4px">gist</code> 权限 → 生成后复制。<br>
+            直达链接：<a href="https://github.com/settings/tokens" target="_blank" style="color:var(--primary)">https://github.com/settings/tokens</a>
           </div>
         </div>
       </div>
@@ -1624,15 +1635,21 @@ function renderChart(){
     return;
   }
 
-  const W=Math.max(720,days.length*50);
-  const H=280;
-  const padL=48,padR=20,padT=24,padB=40;
+  const W=560;
+  const H=260;
+  const padL=40,padR=16,padT=44,padB=44;
   const chartW=W-padL-padR;
   const chartH=H-padT-padB;
-  const barW=chartW/days.length*0.6;
+  const barW=chartW/days.length*0.45;
   const barGap=chartW/days.length;
 
-  let svg=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;margin:0 auto">`;
+  container.style.display='flex';
+  container.style.flexDirection='column';
+  container.style.alignItems='center';
+  container.style.justifyContent='center';
+  container.style.minHeight='240px';
+
+  let svg=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;max-width:100%;height:auto">`;
   
   const ySteps=4;
   for(let i=0;i<=ySteps;i++){
@@ -1664,15 +1681,15 @@ function renderChart(){
     }
   });
 
-  let legendX=padL;
-  state.goals.forEach((g)=>{
-    svg+=`<rect x="${legendX}" y="4" width="10" height="10" rx="2" fill="${g.color}"/>`;
-    svg+=`<text x="${legendX+14}" y="13" font-size="10" fill="#6B6558">${escapeHtml(g.name)}</text>`;
-    legendX+=g.name.length*12+30;
-  });
-
   svg+=`</svg>`;
-  container.innerHTML=svg;
+
+  // 图例放到 SVG 上方（互换位置后即在饼图下方）
+  let legendHtml='<div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:10px">';
+  state.goals.forEach((g)=>{
+    legendHtml+=`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#6B6558"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${g.color}"></span>${escapeHtml(g.name)}</span>`;
+  });
+  legendHtml+='</div>';
+  container.innerHTML=legendHtml+svg;
 }
 
 /* ===== 周报 Tab 渲染 ===== */
@@ -1719,14 +1736,19 @@ function renderWeekly(){
       <div class="sc-compare ${totalMinCompare.cls}">环比增长量 ${totalMinCompare.text}</div>
     </div>
     <div class="summary-card">
+      <div class="sc-val">${avgMinutesPerDay} <span style="font-size:13px;font-weight:400;color:var(--text3)">分钟</span></div>
+      <div class="sc-label">日均时长</div>
+      <div class="sc-compare ${compare(avgMinutesPerDay,lastAvgMinutes).cls}">环比增长量 ${compare(avgMinutesPerDay,lastAvgMinutes).text}</div>
+    </div>
+    <div class="summary-card">
       <div class="sc-val">${summary.checkinDays} <span style="font-size:13px;font-weight:400;color:var(--text3)">/ ${totalDays}天</span></div>
       <div class="sc-label">打卡天数</div>
       <div class="sc-compare ${compare(summary.checkinDays,lastSummary.checkinDays).cls}">环比增长量 ${compare(summary.checkinDays,lastSummary.checkinDays).text}</div>
     </div>
     <div class="summary-card">
-      <div class="sc-val">${avgMinutesPerDay} <span style="font-size:13px;font-weight:400;color:var(--text3)">分钟</span></div>
-      <div class="sc-label">打卡日均时长</div>
-      <div class="sc-compare ${compare(avgMinutesPerDay,lastAvgMinutes).cls}">环比增长量 ${compare(avgMinutesPerDay,lastAvgMinutes).text}</div>
+      <div class="sc-val">${summary.checkinCount} <span style="font-size:13px;font-weight:400;color:var(--text3)">次</span></div>
+      <div class="sc-label">打卡次数</div>
+      <div class="sc-compare ${compare(summary.checkinCount,lastSummary.checkinCount||0).cls}">环比增长量 ${compare(summary.checkinCount,lastSummary.checkinCount||0).text}</div>
     </div>
   `;
 
@@ -1760,14 +1782,17 @@ function saveWeeklyNote(value){
 }
 
 function calcWeekSummary(start,end){
-  let totalAmount=0,totalMinutes=0;
+  let totalAmount=0,totalMinutes=0,checkinCount=0;
   const days=new Set();
   state.goals.forEach(g=>{
     g.records.forEach(r=>{
       if(r.date>=start && r.date<=end){
         totalAmount+=r.amount||0;
         totalMinutes+=r.minutes||0;
-        if((r.amount||0)>0) days.add(r.date);
+        if((r.amount||0)>0){
+          days.add(r.date);
+          checkinCount++;
+        }
       }
     });
   });
@@ -1776,6 +1801,7 @@ function calcWeekSummary(start,end){
     totalAmount,
     totalMinutes,
     checkinDays:days.size,
+    checkinCount,
     avgPerDay:totalDays>0?Math.round(totalAmount/totalDays):0,
   };
 }
@@ -2335,7 +2361,7 @@ async function uploadToCloud(){
       files:{'learning-goal-data.json':{content:JSON.stringify(state,null,2)}}
     };
     const headers={
-      'Authorization':'token '+cfg.token,
+      'Authorization':'Bearer '+cfg.token,
       'Accept':'application/vnd.github+json',
       'Content-Type':'application/json'
     };
@@ -2377,7 +2403,7 @@ async function downloadFromCloud(){
   setCloudStatus('正在下载...','var(--primary)');
   try{
     const res=await fetch('https://api.github.com/gists/'+cfg.gistId,{
-      headers:{'Authorization':'token '+cfg.token,'Accept':'application/vnd.github+json'}
+      headers:{'Authorization':'Bearer '+cfg.token,'Accept':'application/vnd.github+json'}
     });
     if(!res.ok){
       const err=await res.json().catch(()=>({}));
@@ -2403,6 +2429,31 @@ async function downloadFromCloud(){
   }catch(e){
     setCloudStatus('下载失败：'+e.message,'var(--danger)');
     showToast('下载失败：'+e.message,'error');
+  }
+}
+
+// 测试 Token 是否有效
+async function testCloudToken(){
+  const cfg=getCloudConfig();
+  if(!cfg.token){ showToast('请先填写 GitHub Token','error'); return; }
+  setCloudStatus('正在测试连接...','var(--primary)');
+  try{
+    const res=await fetch('https://api.github.com/user',{
+      headers:{'Authorization':'Bearer '+cfg.token,'Accept':'application/vnd.github+json'}
+    });
+    if(res.ok){
+      const user=await res.json();
+      setCloudStatus('连接成功！当前账号：'+user.login,'var(--success)');
+      showToast('Token 有效，账号：'+user.login,'success');
+    }else{
+      const err=await res.json().catch(()=>({}));
+      const msg=err.message||('HTTP '+res.status);
+      setCloudStatus('连接失败：'+msg,'var(--danger)');
+      showToast('连接失败：'+msg,'error');
+    }
+  }catch(e){
+    setCloudStatus('网络错误：'+e.message,'var(--danger)');
+    showToast('网络错误：'+e.message,'error');
   }
 }
 
