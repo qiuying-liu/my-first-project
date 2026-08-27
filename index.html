@@ -520,6 +520,7 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
   .color-swatch{width:30px;height:30px}
   .bottom-nav{display:flex}
   .top-tabs{display:none}
+  .study-room .study-main{margin-top:58px}
   .modal{border-radius:16px 16px 0 0;max-height:85vh;margin-top:auto;align-self:flex-end;animation:modalUp .3s ease}
   @keyframes modalUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 }
@@ -534,7 +535,7 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 ::selection{background:var(--primary-light);color:var(--primary-dark)}
 
 /* ===== 自习室 ===== */
-.study-room{max-width:700px;margin:0 auto}
+.study-room{max-width:700px;margin:0 auto;min-height:calc(100vh - 318px);display:flex;flex-direction:column;justify-content:center}
 .study-main{
   background:var(--card);border-radius:20px;padding:48px 32px;
   box-shadow:var(--shadow-sm);border:1px solid var(--border-light);
@@ -3130,14 +3131,11 @@ function openEditSourceModal(){
   if(!rows) rows='<div style="color:var(--text3);font-size:13px;text-align:center;padding:24px 0">暂无可编辑的事项</div>';
   document.getElementById('modalContainer').innerHTML=`
     <div class="modal-overlay" style="z-index:600" onclick="if(event.target===this)closeModal()">
-      <div class="modal" style="max-width:420px">
+      <div class="modal" style="max-width:420px;align-self:center;margin-top:0;border-radius:18px">
         <div class="modal-header"><h3>编辑事项</h3>
           <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>
-        <div class="modal-body" style="max-height:60vh;overflow-y:auto">${rows}</div>
-        <div class="modal-footer">
-          <button class="btn btn-outline" onclick="closeModal()">关闭</button>
-        </div>
+        <div class="modal-body" style="max-height:360px;overflow-y:auto">${rows}</div>
       </div>
     </div>`;
 }
