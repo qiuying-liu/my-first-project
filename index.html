@@ -333,10 +333,13 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 .pie-day-chip.selected.today{border-color:transparent;color:#fff}
 .pie-daynav-arrow{width:30px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text2);cursor:pointer;font-size:16px;line-height:1}
 .pie-stats{display:flex;justify-content:space-around;margin-top:10px;font-size:12px;color:var(--text2);border-top:1px solid var(--border-light);padding-top:8px}
-.heatmap-container{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;max-width:360px;margin:0 auto;padding:4px 0}
+.heatmap-container{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;max-width:270px;margin:0 auto;padding:4px 0}
 .heatmap-cell{aspect-ratio:1;border-radius:5px;cursor:pointer;transition:transform .15s}
 .heatmap-cell:hover{transform:scale(1.2)}
 
+.achievement-del{flex-shrink:0;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text3);transition:all .15s}
+.achievement-del:hover{background:var(--danger-light);color:var(--danger)}
+.achievement-del svg{width:15px;height:15px}
 .sc-compare.up{color:var(--success)}
 .sc-compare.down{color:var(--danger)}
 .sc-compare.same{color:var(--text3)}
@@ -405,6 +408,11 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 .form-group input,.form-group select,.form-group textarea{
   width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:9px;
   font-size:14px;background:var(--card);transition:border-color .2s;
+  -webkit-appearance:none;appearance:none;line-height:normal;
+}
+.form-group select{
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23A39E91' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:34px;
 }
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--primary)}
 .form-group textarea{min-height:70px;resize:vertical}
@@ -489,6 +497,15 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
   .form-row{grid-template-columns:1fr}
   .weekly-notes{grid-template-columns:1fr}
   .me-grid{grid-template-columns:1fr}
+  body{overflow-x:hidden}
+  .modal-header{padding:16px 16px 14px}
+  .modal-body{padding:16px 16px}
+  .modal-footer{padding:14px 16px 18px}
+  .form-group input,.form-group textarea{font-size:16px;padding:11px 13px}
+  .form-group select{font-size:16px;padding:11px 34px 11px 13px}
+  .form-group input,.form-group select{height:45px}
+  .color-picker{gap:6px}
+  .color-swatch{width:30px;height:30px}
   .bottom-nav{display:flex}
   .top-tabs{display:none}
   .modal{border-radius:16px 16px 0 0;max-height:85vh;margin-top:auto;align-self:flex-end;animation:modalUp .3s ease}
@@ -1067,9 +1084,9 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
     <h3>计时完成！</h3>
     <p>是否开始休息？</p>
     <div class="break-confirm-actions">
-      <button class="btn btn-primary" onclick="startBreak()">开始休息</button>
-      <button class="btn btn-success" onclick="continueTimer()">继续计时</button>
-      <button class="btn btn-outline" onclick="skipBreak()">暂不休息</button>
+      <button class="btn btn-primary" onclick="startBreak()">休息</button>
+      <button class="btn btn-success" onclick="continueTimer()">继续</button>
+      <button class="btn btn-outline" onclick="skipBreak()">暂不</button>
     </div>
     <div style="font-size:11px;color:var(--text3);margin-top:10px">继续计时将接续正计时，两次时长合并后统一取整记录</div>
   </div>
@@ -1104,7 +1121,7 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 
 const STORAGE_KEY = 'learning_goal_dashboard_v2';
 // 莫兰迪色系
-const COLORS = ['#c97f73','#b87847','#c9b273','#b4b847','#acc973','#71b847','#79c973','#47b862','#73c9a1','#47b8a5','#73bdc9','#4787b8','#738ac9','#4b47b8','#9073c9','#8e47b8','#c373c9','#b8479d','#c9739b','#b8475a'];
+const COLORS = ['#c97f73','#b87847','#c9b273','#b4b847','#acc973','#71b847','#79c973','#47b862','#73c9a1','#47b8a5','#73bdc9','#4787b8','#738ac9','#4b47b8','#9073c9','#8e47b8','#c373c9','#b8479d','#c9739b','#b8475a','#b8a098','#8fa5b5','#9da89a','#9d9ab0','#c2b59b','#b09090','#95adad','#c4a882','#9797d8','#d8d897'];
 
 /* ===== 状态 ===== */
 let state = loadState();
@@ -1222,7 +1239,7 @@ function loadState(){
       data.todos=data.todos.filter(t=>{
         if(!t || typeof t!=='object' || !t.name) return false;
         if(!t.records || !Array.isArray(t.records)) t.records=[];
-        if(!t.color) t.color=COLORS[t.id?parseInt(t.id.length)%20:2];
+        if(!t.color) t.color=COLORS[t.id?parseInt(t.id.length)%COLORS.length:2];
         return true;
       });
       data.achievements=data.achievements.filter(a=>{
@@ -1612,6 +1629,9 @@ function renderAchievementCard(a){
           <div class="achievement-name">${escapeHtml(a.name)}</div>
           <div class="achievement-meta">总量 ${a.total} ${escapeHtml(a.unit)} · 达成于 ${formatDateCN(a.achievedAt||todayStr()).split(' ')[0]}</div>
         </div>
+        <button class="achievement-del" title="删除成就" onclick="deleteAchievement('${a.id}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
       </div>
       <div class="achievement-stats">
         <div class="achievement-stat"><div class="as-val">${a.total}</div><div class="as-label">${escapeHtml(a.unit)}</div></div>
@@ -1620,6 +1640,22 @@ function renderAchievementCard(a){
       </div>
     </div>
   `;
+}
+
+// 删除成就：从成就列表移除，但数据记录保留在周报（转入 trash）
+function deleteAchievement(id){
+  const a=(state.achievements||[]).find(x=>x.id===id);
+  if(!a) return;
+  showConfirm('删除成就',`确定删除成就「${a.name}」吗？该成就将从列表中移除，但其数据记录仍会保留在周报中。`,()=>{
+    if(!state.trash) state.trash=[];
+    const rec={id:a.id,name:a.name,unit:a.unit||'',color:a.color,type:'achievement',records:(a.records||[]).slice()};
+    const ex=state.trash.find(x=>x.id===a.id);
+    if(ex){ ex.records=ex.records.concat(rec.records); }
+    else { state.trash.push(rec); }
+    state.achievements=state.achievements.filter(x=>x.id!==id);
+    saveState();
+    render();
+  });
 }
 
 function renderBoardCard(goal){
@@ -2129,6 +2165,11 @@ function showPieDetail(el){
 }
 
 /* ===== 热力图 ===== */
+// 点击热力图格子：显示当日总时长（几小时几分钟）
+function showHeatmapDay(d,mins){
+  const label=formatDateCN(d).split(' ')[0];
+  showToast(mins>0?`${label} 专注 ${formatDurationPlain(mins)}`:`${label} 无专注记录`,'');
+}
 function renderHeatmap(){
   const container=document.getElementById('heatmapContainer');
   if(!container) return;
@@ -2138,7 +2179,7 @@ function renderHeatmap(){
     days.push(addDays(today,-i));
   }
   const dayMinutes={};
-  state.goals.forEach(g=>{
+  allMinuteSources().forEach(g=>{
     g.records.forEach(r=>{
       if(days.includes(r.date)){
         dayMinutes[r.date]=(dayMinutes[r.date]||0)+(r.minutes||0);
@@ -2146,15 +2187,14 @@ function renderHeatmap(){
     });
   });
   const maxMin=Math.max(...Object.values(dayMinutes),1);
-  // 莫兰迪色系从浅到深
-  // 浅绿 -> 深墨绿 渐变，色阶拉开便于分辨
-  const colors=['#e6f4e8','#c9e8cf','#a9dab1','#86cb91','#62bc71','#46a456','#398445','#2e6b38'];
+  // 低饱和、低透明度蓝色（透明度随强度递增）
+  const colors=['rgba(118,158,190,0.06)','rgba(118,158,190,0.15)','rgba(118,158,190,0.28)','rgba(118,158,190,0.42)','rgba(118,158,190,0.56)','rgba(118,158,190,0.70)','rgba(118,158,190,0.82)','rgba(118,158,190,0.92)'];
   container.innerHTML=days.map(d=>{
     const mins=dayMinutes[d]||0;
     const level=mins===0?0:Math.min(7,Math.ceil((mins/maxMin)*7));
     const color=colors[level];
     const dateLabel=formatDateCN(d).split(' ')[0];
-    return `<div class="heatmap-cell" style="background:${color}" title="${dateLabel}: ${mins}分钟"></div>`;
+    return `<div class="heatmap-cell" style="background:${color}" title="${dateLabel}: ${mins}分钟" onclick="showHeatmapDay('${d}',${mins})"></div>`;
   }).join('');
 }
 
@@ -2988,7 +3028,7 @@ function saveNewTodo(addToGoal){
     return;
   }
   if(!state.todos) state.todos=[];
-  state.todos.push({id:uid(),name,color:COLORS[state.todos.length%20],records:[]});
+  state.todos.push({id:uid(),name,color:COLORS[state.todos.length%COLORS.length],records:[]});
   saveState();
   showToast('已创建普通待办：'+name,'success');
   render();
