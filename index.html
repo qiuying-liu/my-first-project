@@ -239,14 +239,14 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 .achievement-stat{text-align:center;padding:10px 4px;background:var(--bg);border-radius:8px}
 .achievement-stat .as-val{font-size:17px;font-weight:700;color:var(--success)}
 .achievement-stat .as-label{font-size:11px;color:var(--text3);margin-top:2px}
-.recent-records-list{max-height:280px;overflow-y:auto}
-.recent-record-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:9px;border-bottom:1px solid var(--border-light);transition:background .2s}
+.recent-records-list{max-height:560px;overflow-y:auto}
+.recent-record-item{display:flex;align-items:center;justify-content:space-between;padding:14px 12px;border-radius:9px;border-bottom:1px solid var(--border-light);transition:background .2s}
 .recent-record-item:hover{background:var(--bg)}
 .recent-record-left{display:flex;align-items:center;gap:10px;min-width:0}
 .recent-record-left .rr-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
 .rr-name{font-size:13px;font-weight:600;color:var(--text)}
 .rr-meta{font-size:12px;color:var(--text3);margin-top:1px}
-.recent-record-item .record-del{opacity:0}
+.recent-record-item .record-del{opacity:1}
 .recent-record-item:hover .record-del{opacity:1}
 .board-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
 .board-card{
@@ -686,9 +686,9 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 .goal-select-item:hover .gsi-del{opacity:1}
 .gsi-del:hover{background:var(--danger-light);color:var(--danger)}
 .gsi-del svg{width:14px;height:14px}
-.edit-del{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:8px;color:var(--danger);background:var(--danger-light);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
-.edit-del:hover{background:var(--danger);color:#fff}
-.edit-del svg{width:14px;height:14px}
+.edit-del{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;color:var(--text3);cursor:pointer;transition:all .15s}
+.edit-del:hover{background:var(--danger-light);color:var(--danger)}
+.edit-del svg{width:15px;height:15px}
 .goal-select-empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:14px}
 .goal-select-footer{display:flex;gap:10px;padding:14px 12px;border-top:1px solid var(--border-light)}
 .goal-select-footer .btn-new{flex:0 0 calc(75% - 5px);min-width:0;box-sizing:border-box;min-height:46px;font-size:14px}
@@ -3106,24 +3106,22 @@ function renderGoalSelectList(){
 function openEditSourceModal(){
   let rows='';
   state.goals.filter(g=>!isCompleted(g)).forEach(g=>{
-    rows+=`<div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border-light)">
+    rows+=`<div style="display:flex;align-items:center;gap:10px;padding:18px 0;border-bottom:1px solid var(--border-light)">
       <span style="width:12px;height:12px;border-radius:50%;background:${g.color};flex-shrink:0"></span>
       <span style="flex:1;min-width:0;font-size:14px;font-weight:600">${escapeHtml(g.name)}</span>
       <span style="font-size:12px;color:var(--text3);flex-shrink:0">目标</span>
       <button class="edit-del" title="删除" onclick="confirmRemoveSource('goal','${g.id}')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-        <span>删除</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>`;
   });
   (state.todos||[]).forEach(t=>{
-    rows+=`<div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border-light)">
+    rows+=`<div style="display:flex;align-items:center;gap:10px;padding:18px 0;border-bottom:1px solid var(--border-light)">
       <span style="width:12px;height:12px;border-radius:50%;background:${t.color};flex-shrink:0"></span>
       <span style="flex:1;min-width:0;font-size:14px;font-weight:600">${escapeHtml(t.name)}</span>
       <span style="font-size:12px;color:var(--text3);flex-shrink:0">待办</span>
       <button class="edit-del" title="删除" onclick="confirmRemoveSource('todo','${t.id}')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-        <span>删除</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>`;
   });
@@ -3134,7 +3132,7 @@ function openEditSourceModal(){
         <div class="modal-header"><h3>编辑事项</h3>
           <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>
-        <div class="modal-body" style="max-height:360px;overflow-y:auto">${rows}</div>
+        <div class="modal-body" style="max-height:470px;overflow-y:auto">${rows}</div>
       </div>
     </div>`;
 }
