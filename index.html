@@ -7,11 +7,11 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="学习目标">
+<meta name="apple-mobile-web-app-title" content="学习to do">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
-<title>学习目标管理台</title>
+<title>学习to do</title>
 <style>
 /* ===== 重置与基础 ===== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -708,7 +708,7 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
       </div>
       <div>
-        <h1>学习目标台</h1>
+        <h1>学习to do</h1>
         <p>有终点 · 有总量</p>
       </div>
     </div>
@@ -1131,7 +1131,7 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 
 <script>
 /* ============================================================
-   学习目标管理台 - 核心逻辑
+   学习to do - 核心逻辑
    ============================================================ */
 
 const STORAGE_KEY = 'learning_goal_dashboard_v2';
@@ -2338,7 +2338,7 @@ function openBackfillModal(goalId){
   if(!goal) return;
   const today=todayStr();
   const dates=[];
-  for(let i=1;i<=6;i++){
+  for(let i=1;i<=7;i++){
     dates.push(addDays(today,-i));
   }
   
@@ -2353,7 +2353,7 @@ function openBackfillModal(goalId){
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label>选择日期（最近 6 天）</label>
+            <label>选择日期（最近 7 天）</label>
             <div class="date-picker-row" id="backfillDates">
               ${dates.map((d,i)=>`
                 <button class="date-chip ${i===0?'selected':''}" data-date="${d}" onclick="selectBackfillDate(this)">
@@ -2364,7 +2364,7 @@ function openBackfillModal(goalId){
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>数量（${goal.unit}）</label>
+              <label>数量（${goal.unit}） <span class="optional">选填</span></label>
               <input type="number" id="backfillAmount" min="0.1" step="any" placeholder="输入数量" value="">
             </div>
             <div class="form-group">
@@ -2397,18 +2397,18 @@ function submitBackfill(goalId){
   const date=selected.dataset.date;
   const amount=parseFloat(document.getElementById('backfillAmount').value);
   const minutes=parseInt(document.getElementById('backfillMinutes').value);
-  if(!amount||amount<=0){showToast('请输入有效的数量','error');return;}
+  const validAmount=(amount&&amount>0)?amount:null;
   
   const goal=state.goals.find(g=>g.id===goalId);
   const wasIncomplete=goal?getRemaining(goal)>0:false;
-  addRecord(goalId,{date,amount,minutes:minutes||null,isBackfill:true});
+  addRecord(goalId,{date,amount:validAmount,minutes:minutes||null,isBackfill:true});
   closeModal();
   if(wasIncomplete && goal && getRemaining(goal)<=0){
     launchConfetti();
     maybeArchiveGoal(goal);
     showToast('恭喜达成目标：'+goal.name,'success');
   }else{
-    showToast(`已补记 ${formatDateCN(date).split(' ')[0]} ${amount}单位`,'success');
+    showToast(`已补记 ${formatDateCN(date).split(' ')[0]}${validAmount?(' '+validAmount+'单位'):''}`,'success');
   }
   render();
 }
@@ -2562,7 +2562,7 @@ function confirmDeleteGoal(goalId){
 function showConfirm(title,message,onConfirm,confirmText,confirmClass){
   const html=`
     <div class="modal-overlay" style="z-index:650" onclick="if(event.target===this)closeModal()">
-      <div class="modal" style="max-width:380px">
+      <div class="modal" style="max-width:380px;align-self:center;margin:auto;border-radius:18px">
         <div class="modal-header">
           <h3>${escapeHtml(title)}</h3>
           <button class="modal-close" onclick="closeModal()">
@@ -2623,7 +2623,7 @@ function exportData(){
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url;
-  a.download=`学习目标备份_${todayStr()}.json`;
+  a.download=`学习to do备份_${todayStr()}.json`;
   a.click();
   URL.revokeObjectURL(url);
   showToast('数据已导出','success');
@@ -2689,7 +2689,7 @@ async function uploadToCloud(){
   setCloudStatus('正在上传...','var(--primary)');
   try{
     const payload={
-      description:'学习目标管理台同步数据',
+      description:'学习to do同步数据',
       public:false,
       files:{'learning-goal-data.json':{content:JSON.stringify(state,null,2)}}
     };
@@ -2823,7 +2823,7 @@ function clearExamples(){
 function promptClearAll(){
   const html=`
     <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
-      <div class="modal" style="max-width:380px">
+      <div class="modal" style="max-width:380px;align-self:center;margin:auto;border-radius:18px">
         <div class="modal-header">
           <h3 style="color:var(--danger)">清空全部数据</h3>
           <button class="modal-close" onclick="closeModal()">

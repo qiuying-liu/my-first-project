@@ -1,6 +1,6 @@
 {
-  "name": "学习目标管理台",
-  "short_name": "学习目标",
+  "name": "学习to do",
+  "short_name": "学习to do",
   "description": "学习目标管理与专注时长统计",
   "start_url": ".",
   "scope": ".",
