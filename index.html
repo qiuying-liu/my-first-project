@@ -92,7 +92,7 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 .sidebar-footer{padding-top:16px;border-top:1px solid var(--border-light);font-size:11px;color:var(--text3);text-align:center}
 
 .main-content{flex:1;margin-left:200px;padding:28px 32px 40px;min-width:0}
-.top-nav{display:none;align-items:center;justify-content:space-between;margin-bottom:24px}
+.top-nav{display:none;align-items:center;justify-content:center;margin-bottom:24px}
 .top-nav h2{font-size:20px;font-weight:700}
 .top-tabs{display:none;gap:6px;background:var(--card);padding:5px;border-radius:12px;box-shadow:var(--shadow-sm)}
 .top-tab{padding:8px 18px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap}
@@ -155,6 +155,11 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 .goal-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
 .goal-card-title{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
 .goal-color-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;background:var(--goal-color)}
+.goal-checkin{display:flex;flex-direction:column;align-items:center;flex-shrink:0;gap:2px;width:52px}
+.goal-checkin-ring{width:44px;height:44px;position:relative}
+.goal-checkin-ring svg{transform:rotate(-90deg);width:44px;height:44px;display:block}
+.goal-checkin-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text)}
+.goal-checkin-label{font-size:10px;color:var(--text3);font-weight:500;white-space:nowrap}
 .goal-name{font-size:16px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .goal-meta{font-size:12px;color:var(--text3);margin-top:2px}
 .goal-actions{display:flex;gap:4px;flex-shrink:0}
@@ -698,8 +703,7 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
     <ul class="nav-list" id="sidebarNav">
       <li><button class="nav-item" data-tab="study">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        自习室
-      </button></li>
+        自习室</li>
       <li><button class="nav-item active" data-tab="today">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="12" cy="15" r="2" fill="currentColor"/></svg>
         今日
@@ -728,12 +732,11 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
   <main class="main-content">
     <!-- 顶部导航（平板） -->
     <div class="top-nav">
-      <h2 id="topTitle">今日</h2>
-      <div class="top-tabs" id="topTabs">
+        <div class="top-tabs" id="topTabs">
         <button class="top-tab" data-tab="study">自习室</button>
         <button class="top-tab active" data-tab="today">今日</button>
         <button class="top-tab" data-tab="board">成就</button>
-        <button class="top-tab" data-tab="weekly">周报</button>
+        <button class="top-tab" data-tab="weekly">数据</button>
         <button class="top-tab" data-tab="me">我的</button>
       </div>
     </div>
@@ -1048,7 +1051,7 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
   </button>
   <button class="bottom-nav-item" data-tab="weekly">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 3 3 5-6"/></svg>
-    周报
+    数据
   </button>
   <button class="bottom-nav-item" data-tab="me">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -1390,8 +1393,8 @@ function switchTab(tab){
   document.querySelectorAll('.nav-item,.top-tab,.bottom-nav-item').forEach(el=>{
     el.classList.toggle('active',el.dataset.tab===tab);
   });
-  const titles={study:'自习室',today:'今日',board:'看板',weekly:'周报',me:'我的'};
-  document.getElementById('topTitle').textContent=titles[tab];
+  const titles={study:'自习室',today:'今日',board:'看板',weekly:'数据',me:'我的'};
+  const _tt=document.getElementById('topTitle'); if(_tt) _tt.textContent=titles[tab];
   render();
 }
 
@@ -1461,6 +1464,8 @@ function renderGoalCard(goal){
   const overdue=isOverdue(goal);
   const done=isCompleted(goal);
   const est=getEstimatedFinish(goal);
+  // 累计打卡次数（amount>0 的打卡记录数）
+  const checkinCount=(goal.records||[]).filter(r=>(r.amount||0)>0).length;
 
   let cardClass='goal-card';
   if(done) cardClass+=' completed';
@@ -1549,7 +1554,15 @@ function renderGoalCard(goal){
       ${alertTag}
       <div class="goal-card-header">
         <div class="goal-card-title">
-          <div class="goal-color-dot"></div>
+          <div class="goal-checkin">
+            <div class="goal-checkin-ring">
+              <svg width="44" height="44" viewBox="0 0 44 44">
+                <circle cx="22" cy="22" r="19" fill="none" stroke="#EDE7DA" stroke-width="4"/>
+                <circle cx="22" cy="22" r="19" fill="none" stroke="${goal.color}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${2*Math.PI*19}" stroke-dashoffset="${(2*Math.PI*19)*(1-progress/100)}"/>
+              </svg>
+              <span class="goal-checkin-num" style="font-size:13px">${Math.round(progress)}%</span>
+            </div>
+          </div>
           <div style="min-width:0">
             <div class="goal-name">${escapeHtml(goal.name)}</div>
             <div class="goal-meta">总量 ${goal.total} ${goal.unit} · 截止 ${formatDateCN(goal.deadline).split(' ')[0]}</div>
@@ -1566,16 +1579,9 @@ function renderGoalCard(goal){
       </div>
 
       <div class="goal-stats">
-        <div class="stat-box ring-stat">
-          <div class="progress-ring ring-sm">
-            <svg width="64" height="64" viewBox="0 0 64 64">
-              <circle cx="32" cy="32" r="28" fill="none" stroke="#EDE7DA" stroke-width="6"/>
-              <circle cx="32" cy="32" r="28" fill="none" stroke="${goal.color}" stroke-width="6"
-                stroke-linecap="round" stroke-dasharray="${2*Math.PI*28}" stroke-dashoffset="${(2*Math.PI*28)*(1-progress/100)}"/>
-            </svg>
-            <div class="ring-text" style="font-size:17px">${Math.round(progress)}%</div>
-          </div>
-          <div class="stat-label">完成率</div>
+        <div class="stat-box">
+          <div class="stat-value">${checkinCount}</div>
+          <div class="stat-label">累计打卡</div>
         </div>
         <div class="stat-box">
           <div class="stat-value">${streak}</div>
@@ -1866,7 +1872,8 @@ function renderChart(){
 
   const W=560;
   const H=260;
-  const padL=40,padR=16,padT=44,padB=44;
+  const padL=66,padR=16,padT=44,padB=44;
+  const fmtMin=(mins)=>{const h=Math.floor(mins/60),m=mins%60;if(h===0)return m+'分';if(m===0)return h+'小时';return h+'小时'+m+'分钟';};
   const chartW=W-padL-padR;
   const chartH=H-padT-padB;
   const barW=chartW/days.length*0.45;
@@ -1880,12 +1887,16 @@ function renderChart(){
 
   let svg=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;max-width:100%;height:auto">`;
   
-  const ySteps=4;
+  const maxH=maxTotal/60;
+  const step=Math.max(0.5, Math.ceil(maxH/4*2)/2);
+  const ySteps=Math.ceil(maxH/step);
+  const fmtH=(m)=>{const s=Math.round(m*10)/10;return (Number.isInteger(s)?s:s.toFixed(1))+'h';};
   for(let i=0;i<=ySteps;i++){
-    const y=padT+chartH-(chartH/ySteps)*i;
-    const val=Math.round(maxTotal/ySteps*i);
+    const valH=i*step;
+    const frac=Math.min(1,valH/maxH);
+    const y=padT+chartH-frac*chartH;
     svg+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#EDE7DA" stroke-width="1"/>`;
-    svg+=`<text x="${padL-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#A39E91">${val}</text>`;
+    svg+=`<text x="${padL-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#A39E91">${fmtH(valH)}</text>`;
   }
 
   data.forEach((d,i)=>{
@@ -1904,9 +1915,9 @@ function renderChart(){
     const date=parseDate(d.date);
     const label=(date.getMonth()+1)+'/'+date.getDate();
     const isWeekend=date.getDay()===0||date.getDay()===6;
-    svg+=`<text x="${x+barW/2}" y="${H-padB+16}" text-anchor="middle" font-size="10" fill="${isWeekend?'#C9A96E':'#A39E91'}">${label}</text>`;
+    svg+=`<text x="${x+barW/2}" y="${H-padB+16}" text-anchor="middle" font-size="10" fill="#A39E91">${label}</text>`;
     if(d.date===today){
-      svg+=`<text x="${x+barW/2}" y="${H-padB+28}" text-anchor="middle" font-size="9" fill="#5B9BD5" font-weight="600">今天</text>`;
+      svg+=`<text x="${x+barW/2}" y="${H-padB+28}" text-anchor="middle" font-size="9" fill="#A39E91" font-weight="600">今天</text>`;
     }
   });
 
@@ -2055,10 +2066,14 @@ function calcWeekSummary(start,end){
 
 function changeWeek(delta){
   currentWeekOffset+=delta;
+  const wk=addDays(getWeekKey(todayStr()),currentWeekOffset*7);
+  const offset=daysBetween(getWeekKey(todayStr()), todayStr());
+  pieDate=addDays(wk, offset);
   renderWeekly();
 }
 function goToCurrentWeek(){
   currentWeekOffset=0;
+  pieDate=todayStr();
   renderWeekly();
 }
 
@@ -2083,13 +2098,11 @@ function renderPieDayNav(){
   const today=todayStr();
   nav.innerHTML=`
     <div class="pie-daynav-week">
-      <button class="pie-daynav-arrow" onclick="shiftPieWeek(-1)">‹</button>
-      ${Array.from({length:7},(_,i)=>{const d=addDays(monday,i);return `<button class="pie-day-chip ${d===pieDate?'selected':''} ${d===today?'today':''}" onclick="selectPieDay('${d}')">${d===today?'今':weekdays[i]}<span class="pie-day-sub">${d.slice(5)}</span></button>`;}).join('')}
-      <button class="pie-daynav-arrow" onclick="shiftPieWeek(1)">›</button>
+      ${Array.from({length:7},(_,i)=>{const d=addDays(monday,i);return `<button class="pie-day-chip ${d===pieDate?'selected':''} ${d===today?'today':''}" onclick="selectPieDay('${d}')">${weekdays[i]}</button>`;}).join('')}
     </div>`;
 }
 function selectPieDay(d){ pieDate=d; renderPieChart('day'); renderPieDayNav(); }
-function shiftPieWeek(n){ pieDate=addDays(pieDate, n*7); renderPieChart('day'); renderPieDayNav(); }
+function shiftPieWeek(n){ changeWeek(n); }
 function renderPieChart(period){
   const container=document.getElementById('pieChartContainer');
   if(!container) return;
