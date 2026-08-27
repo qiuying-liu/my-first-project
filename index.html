@@ -98,20 +98,6 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 .top-tab{padding:8px 18px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap}
 .top-tab.active{background:var(--primary-gradient);color:#fff}
 
-/* ===== 备份横幅 ===== */
-.backup-banner{
-  background:linear-gradient(135deg,#F0E4C8,#E8D9B0);
-  border-bottom:1px solid #D4C08A;padding:10px 20px;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  font-size:13px;color:#7A6235;
-}
-.backup-banner .banner-left{display:flex;align-items:center;gap:8px}
-.backup-banner button{
-  background:#7A6235;color:#fff;padding:5px 14px;border-radius:7px;
-  font-size:12px;font-weight:600;white-space:nowrap;
-}
-.backup-banner .banner-close{background:none;color:#7A6235;padding:4px 8px;font-size:16px}
-
 /* ===== Tab 内容 ===== */
 .tab-content{display:none;animation:fadeIn .3s ease}
 .tab-content.active{display:block}
@@ -177,6 +163,10 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 .goal-actions svg{width:16px;height:16px}
 
 .goal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.goal-stats .ring-stat{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px 6px}
+.goal-stats .ring-sm{width:56px;height:56px;margin:0 auto}
+.goal-stats .ring-sm svg{width:56px;height:56px;display:block}
+.goal-stats .ring-sm .ring-text{font-size:15px}
 .stat-box{background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px;text-align:center}
 .stat-value{font-size:18px;font-weight:700;color:var(--text)}
 .stat-label{font-size:11px;color:var(--text3);margin-top:2px}
@@ -223,6 +213,29 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 }
 
 /* 看板 */
+.achievement-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.achievement-card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm);border:1px solid var(--border-light);position:relative;overflow:hidden;transition:all .2s}
+.achievement-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--goal-color)}
+.achievement-card:hover{box-shadow:var(--shadow)}
+.achievement-card-top{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.achievement-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.achievement-icon svg{width:22px;height:22px}
+.achievement-info{flex:1;min-width:0}
+.achievement-name{font-size:16px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.achievement-meta{font-size:12px;color:var(--text3);margin-top:2px}
+.achievement-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.achievement-stat{text-align:center;padding:10px 4px;background:var(--bg);border-radius:8px}
+.achievement-stat .as-val{font-size:17px;font-weight:700;color:var(--success)}
+.achievement-stat .as-label{font-size:11px;color:var(--text3);margin-top:2px}
+.recent-records-list{max-height:56vh;overflow-y:auto}
+.recent-record-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:9px;border-bottom:1px solid var(--border-light);transition:background .2s}
+.recent-record-item:hover{background:var(--bg)}
+.recent-record-left{display:flex;align-items:center;gap:10px;min-width:0}
+.recent-record-left .rr-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.rr-name{font-size:13px;font-weight:600;color:var(--text)}
+.rr-meta{font-size:12px;color:var(--text3);margin-top:1px}
+.recent-record-item .record-del{opacity:0}
+.recent-record-item:hover .record-del{opacity:1}
 .board-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
 .board-card{
   background:var(--card);border-radius:var(--radius);padding:22px;
@@ -309,6 +322,16 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 .chart-tab{border:none;background:transparent;padding:4px 10px;font-size:11px;border-radius:4px;cursor:pointer;color:var(--text2)}
 .chart-tab.active{background:var(--card);color:var(--primary-dark);font-weight:600;box-shadow:var(--shadow-sm)}
 .pie-chart-container{display:flex;justify-content:center;align-items:center;min-height:200px}
+.pie-day-nav{margin-bottom:12px}
+.pie-daynav-week{display:flex;gap:5px;align-items:stretch;flex-wrap:wrap;justify-content:center}
+.pie-day-chip{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 9px;border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--text2);cursor:pointer;background:var(--card);line-height:1.25;min-width:34px;transition:all .15s}
+.pie-day-chip .pie-day-sub{font-size:9px;color:var(--text3)}
+.pie-day-chip:hover{border-color:var(--primary)}
+.pie-day-chip.selected{background:var(--primary-gradient);color:#fff;border-color:transparent}
+.pie-day-chip.selected .pie-day-sub{color:rgba(255,255,255,.85)}
+.pie-day-chip.today{border-color:var(--success);color:var(--success)}
+.pie-day-chip.selected.today{border-color:transparent;color:#fff}
+.pie-daynav-arrow{width:30px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text2);cursor:pointer;font-size:16px;line-height:1}
 .pie-stats{display:flex;justify-content:space-around;margin-top:10px;font-size:12px;color:var(--text2);border-top:1px solid var(--border-light);padding-top:8px}
 .heatmap-container{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;max-width:360px;margin:0 auto;padding:4px 0}
 .heatmap-cell{aspect-ratio:1;border-radius:5px;cursor:pointer;transition:transform .15s}
@@ -470,7 +493,6 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
   .top-tabs{display:none}
   .modal{border-radius:16px 16px 0 0;max-height:85vh;margin-top:auto;align-self:flex-end;animation:modalUp .3s ease}
   @keyframes modalUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-  .backup-banner{font-size:12px;padding:8px 12px}
 }
 
 /* 滚动条 */
@@ -530,6 +552,7 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 }
 .goal-duration-item .gdi-name{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text)}
 .goal-duration-item .gdi-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.goal-duration-item .gdi-tag{font-size:10px;color:var(--text3);background:var(--bg);border:1px solid var(--border);padding:1px 6px;border-radius:4px}
 .goal-duration-item input{
   width:70px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;
   font-size:13px;text-align:center;background:var(--card);
@@ -629,22 +652,16 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 .goal-select-item .gsi-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
 .goal-select-item .gsi-meta{font-size:12px;color:var(--text3)}
 .goal-select-item .gsi-arrow{color:var(--text3);flex-shrink:0}
+.gsi-del{flex-shrink:0;width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:var(--text3);opacity:0;transition:all .15s;margin-left:2px}
+.goal-select-item:hover .gsi-del{opacity:1}
+.gsi-del:hover{background:var(--danger-light);color:var(--danger)}
+.gsi-del svg{width:14px;height:14px}
 .goal-select-empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:14px}
+.goal-select-footer{padding:12px;border-top:1px solid var(--border-light)}
+.goal-select-footer .btn{width:100%}
 </style>
 </head>
 <body>
-
-<!-- 备份横幅 -->
-<div id="backupBanner" class="backup-banner hidden">
-  <div class="banner-left">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/><polyline points="21 3 21 9 15 9"/></svg>
-    <span>已累计 <strong id="backupCount">0</strong> 条打卡记录，建议导出备份以防数据丢失</span>
-  </div>
-  <div style="display:flex;align-items:center;gap:8px">
-    <button onclick="exportData()">立即导出</button>
-    <button class="banner-close" onclick="dismissBackupBanner()">×</button>
-  </div>
-</div>
 
 <div class="app-layout">
   <!-- 侧边栏（电脑） -->
@@ -671,8 +688,8 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
         今日
       </button></li>
       <li><button class="nav-item" data-tab="board">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        看板
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13l1 8-4.5-2-4.5 2 1-8"/></svg>
+        成就
       </button></li>
       <li><button class="nav-item" data-tab="weekly">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 3 3 5-6"/></svg>
@@ -698,7 +715,7 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
       <div class="top-tabs" id="topTabs">
         <button class="top-tab" data-tab="study">自习室</button>
         <button class="top-tab active" data-tab="today">今日</button>
-        <button class="top-tab" data-tab="board">看板</button>
+        <button class="top-tab" data-tab="board">成就</button>
         <button class="top-tab" data-tab="weekly">周报</button>
         <button class="top-tab" data-tab="me">我的</button>
       </div>
@@ -788,15 +805,19 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
       </div>
     </section>
 
-    <!-- 看板 Tab -->
+    <!-- 成就 Tab -->
     <section id="tab-board" class="tab-content">
       <div class="page-header">
         <div>
-          <h2>目标看板</h2>
-          <div class="subtitle">所有目标的进度、预案与记录</div>
+          <h2>成就</h2>
+          <div class="subtitle">已达成目标的荣誉档案</div>
         </div>
+        <button class="btn btn-outline btn-sm" onclick="openRecentRecords()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+          最近记录
+        </button>
       </div>
-      <div class="board-grid" id="boardGrid"></div>
+      <div class="achievement-grid" id="achievementGrid"></div>
     </section>
 
     <!-- 周报 Tab -->
@@ -834,27 +855,28 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
               <button class="chart-tab" data-period="month" onclick="switchPiePeriod('month',this)">月</button>
             </div>
           </div>
+          <div class="pie-day-nav hidden" id="pieDayNav"></div>
           <div id="pieChartContainer" class="pie-chart-container"></div>
           <div class="pie-stats">
-            <div>总计：<span id="pieTotal">0</span> 分钟</div>
-            <div>日均：<span id="pieAvg">0</span> 分钟</div>
+            <div>总计：<span id="pieTotal">0分钟</span></div>
+            <div>日均<span id="pieAvgLabel"></span>：<span id="pieAvg">0分钟</span></div>
           </div>
         </div>
-        <div class="chart-card">
-          <div class="chart-header">
-            <span class="chart-title">近30天专注热力图</span>
-          </div>
-          <div id="heatmapContainer" class="heatmap-container"></div>
-        </div>
-      </div>
-
-      <!-- 3. 近14天趋势（左）+ 问题复盘/下周预案（右，上下排列） -->
-      <div class="weekly-analysis-row">
         <div class="chart-card">
           <div class="chart-header">
             <span class="chart-title">近14天专注时长趋势</span>
           </div>
           <div id="chartContainer"></div>
+        </div>
+      </div>
+
+      <!-- 3. 近30天热力图（左）+ 问题复盘/下周预案（右，上下排列） -->
+      <div class="weekly-analysis-row">
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">近30天专注热力图</span>
+          </div>
+          <div id="heatmapContainer" class="heatmap-container"></div>
         </div>
         <div class="weekly-text-col">
           <div class="weekly-text-box">
@@ -1004,8 +1026,8 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
     今日
   </button>
   <button class="bottom-nav-item" data-tab="board">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-    看板
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13l1 8-4.5-2-4.5 2 1-8"/></svg>
+    成就
   </button>
   <button class="bottom-nav-item" data-tab="weekly">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 3 3 5-6"/></svg>
@@ -1046,8 +1068,10 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
     <p>是否开始休息？</p>
     <div class="break-confirm-actions">
       <button class="btn btn-primary" onclick="startBreak()">开始休息</button>
+      <button class="btn btn-success" onclick="continueTimer()">继续计时</button>
       <button class="btn btn-outline" onclick="skipBreak()">暂不休息</button>
     </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px">继续计时将接续正计时，两次时长合并后统一取整记录</div>
   </div>
 </div>
 
@@ -1080,27 +1104,29 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 
 const STORAGE_KEY = 'learning_goal_dashboard_v2';
 // 莫兰迪色系
-const COLORS = ['#B8A098','#8FA5B5','#9DA89A','#9D9AB0','#C2B59B','#B09090','#95ADAD','#C4A882'];
+const COLORS = ['#c97f73','#b87847','#c9b273','#b4b847','#acc973','#71b847','#79c973','#47b862','#73c9a1','#47b8a5','#73bdc9','#4787b8','#738ac9','#4b47b8','#9073c9','#8e47b8','#c373c9','#b8479d','#c9739b','#b8475a'];
 
 /* ===== 状态 ===== */
 let state = loadState();
 let currentTab = 'today';
 let currentWeekOffset = 0;
 let editingGoalId = null;
-let bannerDismissed = false;
 
-/* ===== 渲染内缓存（同一次 render 中复用，避免重复遍历 records） ===== */
-let _renderCache = null;
-function _invalidateCache(){ _renderCache = null; }
+/* ===== 渲染内缓存（带签名校验的持久缓存，跨渲染复用，减少重复遍历 records，降低卡顿） ===== */
+let _renderCache = new Map();
+let _streakCache = new Map();
+function _invalidateCache(){ _renderCache = new Map(); _streakCache = new Map(); }
 function _getGoalStats(goal){
-  if(!_renderCache) _renderCache = {};
-  if(_renderCache[goal.id]) return _renderCache[goal.id];
+  const today=todayStr();
+  const records=goal.records||[];
+  const sig=today+'|'+goal.total+'|'+goal.deadline+'|'+records.length+'|'+records.reduce((s,r)=>s+((r.amount||0)),0);
+  const hit=_renderCache.get(goal.id);
+  if(hit && hit.sig===sig) return hit.stats;
   // 单次遍历算出所有派生量
   let completed=0, todayAmount=0, recent7Amount=0, recent7Count=0;
-  const today=todayStr();
   const sevenDaysAgo=addDays(today,-6);
   const datesSet=new Set();
-  for(const r of goal.records){
+  for(const r of records){
     const amt=r.amount||0;
     completed+=amt;
     datesSet.add(r.date);
@@ -1108,22 +1134,30 @@ function _getGoalStats(goal){
     if(r.date>=sevenDaysAgo && r.date<=today){ recent7Amount+=amt; if(amt>0) recent7Count++; }
   }
   const remaining=Math.max(0,goal.total-completed);
-  const progress=Math.min(100,(completed/goal.total)*100);
+  const progress=goal.total>0?Math.min(100,(completed/goal.total)*100):0;
   const daysLeft=daysBetween(today,goal.deadline);
-  // 原计划每日任务量 q = Q / T，T = 创建日到截止日的总天数（含今天）
+  // 目标总天数 target_days = 创建日(开始日)到截止日的总天数（含今天）
   const createdAt=goal.createdAt||today;
   const planTotalDays=Math.max(1,daysBetween(createdAt,goal.deadline)+1);
-  const plannedDaily=goal.total/planTotalDays;
-  // 今日建议量 = 原计划每日任务量（向上取整为整数）
-  const suggestion=remaining<=0?0:Math.max(1,Math.ceil(plannedDaily));
+  // 基准每日工作量 base_daily = total / target_days
+  const baseDaily=goal.total/planTotalDays;
+  // 已过去天数（今天算第 1 天）
+  const passedDays=Math.max(1,daysBetween(createdAt,today)+1);
+  // 剩余计划天数 remain_days = target_days - passed_days
+  const remainDays=Math.max(0,planTotalDays-passedDays);
+  // 下一日建议 suggest_daily = 剩余工作量 remain_work / 剩余计划天数 remain_days
+  let suggestion;
+  if(remaining<=0) suggestion=0;
+  else if(remainDays<=0) suggestion=Math.max(1,Math.ceil(remaining));
+  else suggestion=Math.max(1,Math.ceil(remaining/remainDays));
   const yesterday=addDays(today,-1);
   const yesterdayMissed=!datesSet.has(yesterday);
   const overdue=remaining>0 && daysLeft<0;
   const done=remaining<=0;
   const recentAvg=recent7Amount>0?recent7Amount/7:null;
   const stats={completed,remaining,progress,daysLeft,suggestion,todayAmount,
-    yesterdayMissed,overdue,done,recentAvg,datesSet,planTotalDays,plannedDaily};
-  _renderCache[goal.id]=stats;
+    yesterdayMissed,overdue,done,recentAvg,datesSet,planTotalDays,baseDaily,passedDays,remainDays};
+  _renderCache.set(goal.id,{sig,stats});
   return stats;
 }
 
@@ -1175,6 +1209,28 @@ function loadState(){
       if(!data.version) data.version=1;
       if(!data.goals || !Array.isArray(data.goals)) data.goals=[];
       if(!data.weeklyNotes) data.weeklyNotes={};
+      if(!data.todos || !Array.isArray(data.todos)) data.todos=[];
+      if(!data.achievements || !Array.isArray(data.achievements)) data.achievements=[];
+      if(!data.trash || !Array.isArray(data.trash)) data.trash=[];
+      data.trash=data.trash.filter(x=>{
+        if(!x || typeof x!=='object' || !x.name) return false;
+        if(!x.records || !Array.isArray(x.records)) x.records=[];
+        if(!x.color) x.color='#8FA5B5';
+        if(!x.type) x.type='goal';
+        return true;
+      });
+      data.todos=data.todos.filter(t=>{
+        if(!t || typeof t!=='object' || !t.name) return false;
+        if(!t.records || !Array.isArray(t.records)) t.records=[];
+        if(!t.color) t.color=COLORS[t.id?parseInt(t.id.length)%20:2];
+        return true;
+      });
+      data.achievements=data.achievements.filter(a=>{
+        if(!a || typeof a!=='object' || !a.name) return false;
+        if(!a.records || !Array.isArray(a.records)) a.records=[];
+        if(!a.color) a.color='#5B6BD5';
+        return true;
+      });
       data.goals=data.goals.filter(g=>{
         if(!g || typeof g!=='object') return false;
         if(g.isExample) return false;
@@ -1193,7 +1249,7 @@ function loadState(){
 }
 
 function createDefaultState(){
-  return {version:2,goals:[],weeklyNotes:{},createdAt:todayStr()};
+  return {version:3,goals:[],todos:[],achievements:[],trash:[],weeklyNotes:{},createdAt:todayStr()};
 }
 
 function saveState(){
@@ -1222,53 +1278,91 @@ function isCompleted(goal){ return _getGoalStats(goal).done; }
 function getRecentAvgSpeed(goal){ return _getGoalStats(goal).recentAvg; }
 
 function getStreak(goal){
-  if(!goal.records || goal.records.length===0) return 0;
-  // 去重并升序排列有记录的日期
-  const dates=[...new Set(goal.records.map(r=>r.date))].sort();
+  const records=goal.records||[];
+  if(records.length===0) return 0;
+  const sig=todayStr()+'|'+records.length;
+  const hit=_streakCache.get(goal.id);
+  if(hit && hit.sig===sig) return hit.v;
+  const dates=new Set(records.map(r=>r.date));
   const today=todayStr();
-  // 找到第一条记录日期
-  const firstDate=dates[0];
-  // 从第一条记录开始，数连续天数（遇到缺口即停）
-  let streak=1;
-  let cursor=firstDate;
-  for(let i=1;i<dates.length;i++){
-    const expected=addDays(cursor,1);
-    if(dates[i]===expected){
-      streak++;
-      cursor=dates[i];
-    }else{
-      break;
-    }
-  }
+  // 从今天起往前数连续有打卡的天数；今天未打卡则连续天数清零
+  let streak=0;
+  let cursor=today;
+  while(dates.has(cursor)){ streak++; cursor=addDays(cursor,-1); }
+  _streakCache.set(goal.id,{sig,v:streak});
   return streak;
 }
 
 function getEstimatedFinish(goal){
-  const remaining=getRemaining(goal);
-  if(remaining<=0) return {date:todayStr(),status:'completed'};
-  // 按用户公式推算：
-  //   q = Q/T（原计划每日任务量）
-  //   D = 剩余任务 / q（还需工作天数）
-  //   实际耗费总天数 = 1 + D（今天算1天）
-  //   提前天数 = T - (1 + D)，正=提前、负=拖后
   const stats=_getGoalStats(goal);
-  const q=stats.plannedDaily;
-  const T=stats.planTotalDays;
-  if(!q || q<=0 || T<=0) return {status:'insufficient'};
-  const D=remaining/q;
-  const daysNeeded=Math.ceil(D);
-  const estDate=addDays(todayStr(),daysNeeded);
-  // diff 正=拖后、负=提前（与原有显示逻辑一致）
-  const diff=(1+D)-T;
-  const diffRounded=Math.round(diff);
-  return {date:estDate,daysNeeded,diff:diffRounded,status:'ok'};
+  const remaining=stats.remaining;
+  if(remaining<=0) return {date:todayStr(),status:'completed'};
+  // 现实预估完成日期：
+  //   假设未来不再刻意追赶进度，每日只按基准工作量 base_daily 完成
+  //   need_days = 剩余工作量 remain_work / base_daily
+  //   estimate_date = 今天 + need_days（进度落后则延后，超前则提前）
+  const base=stats.baseDaily;
+  if(!base || base<=0) return {status:'insufficient'};
+  const needDays=Math.ceil(remaining/base);
+  const estDate=addDays(todayStr(),needDays);
+  // 相对原始截止日期的提前/拖后：正=拖后、负=提前
+  const diff=daysBetween(goal.deadline, estDate);
+  return {date:estDate,needDays,diff,status:'ok'};
 }
 
 function getRecordsInRange(goal,start,end){
   return goal.records.filter(r=>r.date>=start && r.date<=end);
 }
 function getTotalRecords(){
-  return state.goals.reduce((s,g)=>s+g.records.length,0);
+  let n=0;
+  state.goals.forEach(g=>n+=g.records.length);
+  (state.achievements||[]).forEach(a=>n+=a.records.length);
+  (state.todos||[]).forEach(t=>n+=t.records.length);
+  return n;
+}
+
+/* ===== 新增：时长取整 + 数据源聚合 ===== */
+// 计时时长向上取整：<30s 不计；>30s 进位到整分钟；=30s 不计
+function roundUpMinutes(seconds){
+  if(!seconds || seconds<=0) return 0;
+  return Math.floor((seconds+29)/60);
+}
+// 含 amount/分钟的目标类来源（目标 + 已达成归档）
+function allRecordSources(){
+  return [...state.goals, ...(state.achievements||[]), ...(state.trash||[])];
+}
+// 所有可能产生专注时长的来源（目标 + 归档 + 普通待办 + 已删除事项）
+function allMinuteSources(){
+  return [...state.goals, ...(state.achievements||[]), ...(state.todos||[]), ...(state.trash||[])];
+}
+function formatDurationPlain(mins){
+  mins=mins||0;
+  const h=Math.floor(mins/60);
+  const m=mins%60;
+  return h>0?`${h}小时${m}分钟`:`${m}分钟`;
+}
+// 查找某来源（goal/todo/achievement）
+function findSource(type,id){
+  if(type==='todo') return (state.todos||[]).find(x=>x.id===id);
+  if(type==='achievement') return (state.achievements||[]).find(x=>x.id===id);
+  if(type==='trash') return (state.trash||[]).find(x=>x.id===id);
+  return state.goals.find(x=>x.id===id);
+}
+// 目标达成后归档到成就板块并从目标列表移除
+function maybeArchiveGoal(goal){
+  if(!goal || goal.total<=0 || getRemaining(goal)>0) return false;
+  if(!state.achievements) state.achievements=[];
+  if(!state.achievements.some(a=>a.id===goal.id)){
+    state.achievements.push({
+      id:goal.id, name:goal.name, total:goal.total, unit:goal.unit,
+      color:goal.color, deadline:goal.deadline, achievedAt:todayStr(),
+      obstacle:goal.obstacle||'', countermeasure:goal.countermeasure||'',
+      records:goal.records||[]
+    });
+  }
+  state.goals=state.goals.filter(g=>g.id!==goal.id);
+  saveState();
+  return true;
 }
 
 /* ===== Tab 切换 ===== */
@@ -1287,11 +1381,10 @@ function switchTab(tab){
 /* ===== 渲染入口（只渲染当前激活 Tab，避免全量重算） ===== */
 function render(){
   _invalidateCache();
-  try{ updateBackupBanner(); }catch(e){ console.error('updateBackupBanner error:', e); }
   switch(currentTab){
     case 'study':  try{ renderStudy(); }catch(e){ console.error('renderStudy error:', e); } break;
     case 'today':  try{ renderToday(); }catch(e){ console.error('renderToday error:', e); } break;
-    case 'board':  try{ renderBoard(); }catch(e){ console.error('renderBoard error:', e); } break;
+    case 'board':  try{ renderAchievement(); }catch(e){ console.error('renderAchievement error:', e); } break;
     case 'weekly': try{ renderWeekly(); }catch(e){ console.error('renderWeekly error:', e); } break;
     case 'me':     /* 我的页是静态 HTML，无需渲染 */ break;
   }
@@ -1401,7 +1494,7 @@ function renderGoalCard(goal){
       <div class="checkin-area">
         <span style="font-size:13px;color:var(--text2);font-weight:500;white-space:nowrap">今日完成量</span>
         <input type="number" class="checkin-input" id="amount-${goal.id}" 
-          value="${suggestion}" min="1" step="1" 
+          value="${suggestion}" min="0.1" step="any" 
           onfocus="this.select()">
         <button class="btn btn-success btn-sm" onclick="quickCheckin('${goal.id}')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1418,7 +1511,7 @@ function renderGoalCard(goal){
           记录时长
         </button>
       </div>
-      ${todayAmount>0?`<div style="font-size:11px;color:var(--text3);margin-top:6px">今日已记录 ${todayAmount} ${goal.unit}</div>`:''}
+      ${todayAmount>0?`<div style="margin-top:8px"><span style="display:inline-flex;align-items:center;gap:5px;background:var(--success-light);color:#4A7A4E;font-size:12px;font-weight:600;padding:5px 10px;border-radius:7px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>今日已打卡</span></div>`:''}
     `;
   }else{
     checkinHtml=`<div style="text-align:center;padding:8px;color:var(--success);font-size:13px;font-weight:600">
@@ -1456,8 +1549,15 @@ function renderGoalCard(goal){
       </div>
 
       <div class="goal-stats">
-        <div class="stat-box">
-          <div class="stat-value">${Math.round(progress)}%</div>
+        <div class="stat-box ring-stat">
+          <div class="progress-ring ring-sm">
+            <svg width="64" height="64" viewBox="0 0 64 64">
+              <circle cx="32" cy="32" r="28" fill="none" stroke="#EDE7DA" stroke-width="6"/>
+              <circle cx="32" cy="32" r="28" fill="none" stroke="${goal.color}" stroke-width="6"
+                stroke-linecap="round" stroke-dasharray="${2*Math.PI*28}" stroke-dashoffset="${(2*Math.PI*28)*(1-progress/100)}"/>
+            </svg>
+            <div class="ring-text" style="font-size:17px">${Math.round(progress)}%</div>
+          </div>
           <div class="stat-label">完成率</div>
         </div>
         <div class="stat-box">
@@ -1486,16 +1586,40 @@ function renderGoalCard(goal){
 }
 
 /* ===== 看板 Tab 渲染 ===== */
-function renderBoard(){
-  const grid=document.getElementById('boardGrid');
-  if(state.goals.length===0){
+function renderAchievement(){
+  const grid=document.getElementById('achievementGrid');
+  if(!grid) return;
+  const achievements=state.achievements||[];
+  if(achievements.length===0){
     grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      <h3>暂无目标</h3><p>去「今日」页面创建第一个目标吧</p>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="6"/><path d="M15.5 13l1 8-4.5-2-4.5 2 1-8"/></svg>
+      <h3>暂无成就</h3><p>达成目标后会自动归档到这里，成为你的荣誉档案</p>
     </div>`;
   }else{
-    grid.innerHTML=state.goals.map(g=>renderBoardCard(g)).join('');
+    grid.innerHTML=achievements.map(a=>renderAchievementCard(a)).join('');
   }
+}
+
+function renderAchievementCard(a){
+  const totalMinutes=a.records.reduce((s,r)=>s+(r.minutes||0),0);
+  return `
+    <div class="achievement-card" style="--goal-color:${a.color}">
+      <div class="achievement-card-top">
+        <span class="achievement-icon" style="background:${a.color}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <div class="achievement-info">
+          <div class="achievement-name">${escapeHtml(a.name)}</div>
+          <div class="achievement-meta">总量 ${a.total} ${escapeHtml(a.unit)} · 达成于 ${formatDateCN(a.achievedAt||todayStr()).split(' ')[0]}</div>
+        </div>
+      </div>
+      <div class="achievement-stats">
+        <div class="achievement-stat"><div class="as-val">${a.total}</div><div class="as-label">${escapeHtml(a.unit)}</div></div>
+        <div class="achievement-stat"><div class="as-val">${a.records.length}</div><div class="as-label">记录次数</div></div>
+        <div class="achievement-stat"><div class="as-val" style="font-size:13px">${formatDurationPlain(totalMinutes)}</div><div class="as-label">专注时长</div></div>
+      </div>
+    </div>
+  `;
 }
 
 function renderBoardCard(goal){
@@ -1606,6 +1730,73 @@ function renderBoardCard(goal){
   `;
 }
 
+// 加载时归档已达成目标
+function archiveCompletedGoals(){
+  let changed=false;
+  [...state.goals].forEach(g=>{
+    if(g.total>0 && (g.records||[]).reduce((s,r)=>s+(r.amount||0),0)>=g.total){
+      if(maybeArchiveGoal(g)) changed=true;
+    }
+  });
+  if(changed) saveState();
+}
+
+/* ===== 最近记录弹窗 ===== */
+function openRecentRecords(){
+  const items=[];
+  allMinuteSources().forEach(src=>{
+    (src.records||[]).forEach(r=>{
+      let type='goal';
+      if((state.achievements||[]).some(a=>a.id===src.id)) type='achievement';
+      else if((state.trash||[]).some(x=>x.id===src.id)) type='trash';
+      else if((state.todos||[]).some(x=>x.id===src.id)) type='todo';
+      items.push({type,id:src.id,name:src.name,color:src.color,unit:src.unit,r});
+    });
+  });
+  items.sort((a,b)=>b.r.date.localeCompare(a.r.date));
+  const rows=items.map(it=>{
+    const r=it.r;
+    const amountTxt=(r.amount||0)>0?` · <b>+${r.amount}${escapeHtml(it.unit)}</b>`:'';
+    const minTxt=r.minutes?` · ${r.minutes}分`:'';
+    return `<div class="recent-record-item">
+      <div class="recent-record-left">
+        <span class="rr-dot" style="background:${it.color}"></span>
+        <div>
+          <div class="rr-name">${escapeHtml(it.name)}${r.isBackfill?'<span class="backfill-badge" style="margin-left:6px">补</span>':''}</div>
+          <div class="rr-meta">${formatDateCN(r.date).split(' ')[0]}${amountTxt}${minTxt}</div>
+        </div>
+      </div>
+      <button class="record-del" onclick="deleteSourceRecord('${it.type}','${it.id}','${r.id}')" title="删除">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`;
+  }).join('') || '<div class="records-empty">暂无记录</div>';
+  const html=`
+    <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:560px">
+        <div class="modal-header"><h3>最近记录</h3>
+          <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="modal-body" style="padding-top:12px">
+          <div class="recent-records-list">${rows}</div>
+        </div>
+        <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div>
+      </div>
+    </div>`;
+  document.getElementById('modalContainer').innerHTML=html;
+}
+function deleteSourceRecord(type,id,recordId){
+  const src=findSource(type,id);
+  if(!src) return;
+  showConfirm('删除记录','确定要删除这条记录吗？删除后将同步影响周报与成就统计。',()=>{
+    src.records=src.records.filter(r=>r.id!==recordId);
+    saveState();
+    render();
+    openRecentRecords(); // 删除后回到最近记录界面，不退出
+    showToast('记录已删除','success');
+  });
+}
+
 /* ===== 14天堆叠柱状图 ===== */
 function renderChart(){
   const container=document.getElementById('chartContainer');
@@ -1616,12 +1807,15 @@ function renderChart(){
     days.push(addDays(today,-i));
   }
 
+  const sources=allMinuteSources();
+  const nameColor={};
+  sources.forEach(s=>{ if(!nameColor[s.name]) nameColor[s.name]=s.color; });
   const data=days.map(d=>{
     const perGoal={};
     let total=0;
-    state.goals.forEach(g=>{
+    sources.forEach(g=>{
       const mins=g.records.filter(r=>r.date===d && r.minutes).reduce((s,r)=>s+r.minutes,0);
-      if(mins>0){perGoal[g.id]=mins;total+=mins;}
+      if(mins>0){perGoal[g.name]=mins;total+=mins;}
     });
     return {date:d,perGoal,total};
   });
@@ -1661,13 +1855,13 @@ function renderChart(){
   data.forEach((d,i)=>{
     const x=padL+barGap*i+(barGap-barW)/2;
     let y=padT+chartH;
-    state.goals.forEach(g=>{
-      const mins=d.perGoal[g.id]||0;
+    Object.keys(d.perGoal).forEach(name=>{
+      const mins=d.perGoal[name]||0;
       if(mins>0){
         const h=(mins/maxTotal)*chartH;
         y-=h;
-        svg+=`<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="${g.color}" opacity="0.85">
-          <title>${escapeHtml(g.name)}: ${mins}分钟 (${formatDateCN(d.date).split(' ')[0]})</title>
+        svg+=`<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="${nameColor[name]||'#5B9BD5'}" opacity="0.85">
+          <title>${escapeHtml(name)}: ${mins}分钟 (${formatDateCN(d.date).split(' ')[0]})</title>
         </rect>`;
       }
     });
@@ -1682,10 +1876,12 @@ function renderChart(){
 
   svg+=`</svg>`;
 
-  // 图例放到 SVG 下方
+  // 图例放到 SVG 下方：仅展示近14天内有数据的事项
+  const legendNames=new Set();
+  data.forEach(d=>Object.keys(d.perGoal).forEach(n=>legendNames.add(n)));
   let legendHtml='<div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:10px">';
-  state.goals.forEach((g)=>{
-    legendHtml+=`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#6B6558"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${g.color}"></span>${escapeHtml(g.name)}</span>`;
+  legendNames.forEach((name)=>{
+    legendHtml+=`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#6B6558"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${nameColor[name]||'#5B9BD5'}"></span>${escapeHtml(name)}</span>`;
   });
   legendHtml+='</div>';
   container.innerHTML=svg+legendHtml;
@@ -1744,7 +1940,7 @@ function renderWeekly(){
     </div>
     <div class="summary-card">
       <div class="sc-val">${formatDurationVal(avgMinutesPerDay)}</div>
-      <div class="sc-label">日均时长</div>
+      <div class="sc-label">日均时长(按打卡天数)</div>
       <div class="sc-compare ${compare(avgMinutesPerDay,lastAvgMinutes).cls}">环比增长量 ${compare(avgMinutesPerDay,lastAvgMinutes).text}</div>
     </div>
     <div class="summary-card">
@@ -1760,7 +1956,9 @@ function renderWeekly(){
   `;
 
   // 渲染图表（renderWeekly 只在周报 tab 被调用，无需再判断）
-  renderPieChart('day');
+  renderPieChart(piePeriod);
+  const dayNav=document.getElementById('pieDayNav');
+  if(dayNav){ dayNav.classList.toggle('hidden', piePeriod!=='day'); if(piePeriod==='day') renderPieDayNav(); }
   renderHeatmap();
   renderChart();
 
@@ -1791,15 +1989,21 @@ function saveWeeklyNote(value){
 function calcWeekSummary(start,end){
   let totalAmount=0,totalMinutes=0,checkinCount=0;
   const days=new Set();
-  state.goals.forEach(g=>{
+  allRecordSources().forEach(g=>{
     g.records.forEach(r=>{
       if(r.date>=start && r.date<=end){
         totalAmount+=r.amount||0;
-        totalMinutes+=r.minutes||0;
         if((r.amount||0)>0){
           days.add(r.date);
           checkinCount++;
         }
+      }
+    });
+  });
+  allMinuteSources().forEach(s=>{
+    s.records.forEach(r=>{
+      if(r.date>=start && r.date<=end){
+        totalMinutes+=r.minutes||0;
       }
     });
   });
@@ -1824,34 +2028,61 @@ function goToCurrentWeek(){
 
 /* ===== 饼图 ===== */
 let piePeriod='day';
+let pieDate=todayStr();
 function switchPiePeriod(period,el){
   piePeriod=period;
   document.querySelectorAll('.chart-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
+  const nav=document.getElementById('pieDayNav');
+  if(nav) nav.classList.toggle('hidden', period!=='day');
   renderPieChart(period);
+  if(period==='day') renderPieDayNav();
 }
+// 查看每一天：所在周内切换具体日期
+function renderPieDayNav(){
+  const nav=document.getElementById('pieDayNav');
+  if(!nav) return;
+  const monday=getWeekKey(pieDate);
+  const weekdays=['一','二','三','四','五','六','日'];
+  const today=todayStr();
+  nav.innerHTML=`
+    <div class="pie-daynav-week">
+      <button class="pie-daynav-arrow" onclick="shiftPieWeek(-1)">‹</button>
+      ${Array.from({length:7},(_,i)=>{const d=addDays(monday,i);return `<button class="pie-day-chip ${d===pieDate?'selected':''} ${d===today?'today':''}" onclick="selectPieDay('${d}')">${d===today?'今':weekdays[i]}<span class="pie-day-sub">${d.slice(5)}</span></button>`;}).join('')}
+      <button class="pie-daynav-arrow" onclick="shiftPieWeek(1)">›</button>
+    </div>`;
+}
+function selectPieDay(d){ pieDate=d; renderPieChart('day'); renderPieDayNav(); }
+function shiftPieWeek(n){ pieDate=addDays(pieDate, n*7); renderPieChart('day'); renderPieDayNav(); }
 function renderPieChart(period){
   const container=document.getElementById('pieChartContainer');
   if(!container) return;
+  // 仅周饼图日均标注按7天，日/月不标注
+  const pieAvgLabel=document.getElementById('pieAvgLabel');
+  if(pieAvgLabel){
+    pieAvgLabel.textContent = period==='week' ? '(按7天)' : '';
+  }
   const today=todayStr();
-  let startDate;
-  let dayCount;
-  if(period==='day'){startDate=today;dayCount=1;}
-  else if(period==='week'){startDate=getWeekKey(today);dayCount=7;}
+  let startDate,endDate=today,dayCount;
+  if(period==='day'){startDate=pieDate;endDate=pieDate;dayCount=1;}
+  else if(period==='week'){
+    const wk=addDays(getWeekKey(today),currentWeekOffset*7);
+    startDate=wk;endDate=addDays(wk,6);dayCount=7;
+  }
   else{startDate=addDays(today,-29);dayCount=30;}
 
   const goalMinutes={};
   let total=0;
-  state.goals.forEach(g=>{
-    const mins=g.records.filter(r=>r.date>=startDate&&r.date<=today)
+  allMinuteSources().forEach(g=>{
+    const mins=g.records.filter(r=>r.date>=startDate&&r.date<=endDate)
       .reduce((s,r)=>s+(r.minutes||0),0);
     if(mins>0){goalMinutes[g.id]={name:g.name,minutes:mins,color:g.color};total+=mins;}
   });
 
   if(total===0){
     container.innerHTML='<div style="color:var(--text3);font-size:13px;padding:40px 0">暂无专注数据</div>';
-    document.getElementById('pieTotal').textContent='0';
-    document.getElementById('pieAvg').textContent='0';
+    document.getElementById('pieTotal').textContent='0分钟';
+    document.getElementById('pieAvg').textContent='0分钟';
     return;
   }
 
@@ -1883,8 +2114,8 @@ function renderPieChart(period){
   });
 
   container.innerHTML=`<svg viewBox="0 0 400 220" width="100%" style="max-width:420px">${paths}${labels}</svg>`;
-  document.getElementById('pieTotal').textContent=total;
-  document.getElementById('pieAvg').textContent=Math.round(total/dayCount);
+  document.getElementById('pieTotal').textContent=formatDurationPlain(total);
+  document.getElementById('pieAvg').textContent=formatDurationPlain(Math.round(total/dayCount));
 }
 
 // 点击饼图扇区显示该目标的具体专注时长
@@ -1916,10 +2147,11 @@ function renderHeatmap(){
   });
   const maxMin=Math.max(...Object.values(dayMinutes),1);
   // 莫兰迪色系从浅到深
-  const colors=['#E8E2D9','#D4CDBF','#BFB8A8','#A8A08E','#8F8875','#756E5C'];
+  // 浅绿 -> 深墨绿 渐变，色阶拉开便于分辨
+  const colors=['#e6f4e8','#c9e8cf','#a9dab1','#86cb91','#62bc71','#46a456','#398445','#2e6b38'];
   container.innerHTML=days.map(d=>{
     const mins=dayMinutes[d]||0;
-    const level=mins===0?0:Math.min(5,Math.ceil((mins/maxMin)*5));
+    const level=mins===0?0:Math.min(7,Math.ceil((mins/maxMin)*7));
     const color=colors[level];
     const dateLabel=formatDateCN(d).split(' ')[0];
     return `<div class="heatmap-cell" style="background:${color}" title="${dateLabel}: ${mins}分钟"></div>`;
@@ -1987,13 +2219,14 @@ function quickCheckin(goalId){
   const amountEl=document.getElementById('amount-'+goalId);
   const amount=parseFloat(amountEl?.value);
   
-  if(!amount||amount<1){showToast('请输入有效的今日完成量','error');return;}
+  if(!amount||amount<=0){showToast('请输入有效的今日完成量','error');return;}
   
   const wasIncomplete=getRemaining(goal)>0;
   addRecord(goalId,{date:todayStr(),amount,minutes:null,isBackfill:false});
   
   if(wasIncomplete && getRemaining(goal)<=0){
     launchConfetti();
+    maybeArchiveGoal(goal);
     showToast('恭喜达成目标：'+goal.name,'success');
   }else{
     showToast(`已记录 ${amount}${goal.unit}`,'success');
@@ -2068,7 +2301,7 @@ function openBackfillModal(goalId){
           <div class="form-row">
             <div class="form-group">
               <label>数量（${goal.unit}）</label>
-              <input type="number" id="backfillAmount" min="1" step="1" placeholder="输入数量" value="">
+              <input type="number" id="backfillAmount" min="0.1" step="any" placeholder="输入数量" value="">
             </div>
             <div class="form-group">
               <label>分钟数 <span class="optional">选填</span></label>
@@ -2108,6 +2341,7 @@ function submitBackfill(goalId){
   closeModal();
   if(wasIncomplete && goal && getRemaining(goal)<=0){
     launchConfetti();
+    maybeArchiveGoal(goal);
     showToast('恭喜达成目标：'+goal.name,'success');
   }else{
     showToast(`已补记 ${formatDateCN(date).split(' ')[0]} ${amount}单位`,'success');
@@ -2263,7 +2497,7 @@ function confirmDeleteGoal(goalId){
 /* ===== 通用确认框 ===== */
 function showConfirm(title,message,onConfirm){
   const html=`
-    <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal-overlay" style="z-index:650" onclick="if(event.target===this)closeModal()">
       <div class="modal" style="max-width:380px">
         <div class="modal-header">
           <h3>${escapeHtml(title)}</h3>
@@ -2316,22 +2550,6 @@ function launchConfetti(){
     container.appendChild(piece);
     setTimeout(()=>piece.remove(),4000);
   }
-}
-
-/* ===== 备份横幅 ===== */
-function updateBackupBanner(){
-  const total=getTotalRecords();
-  const banner=document.getElementById('backupBanner');
-  if(total>=20 && !bannerDismissed){
-    banner.classList.remove('hidden');
-    document.getElementById('backupCount').textContent=total;
-  }else{
-    banner.classList.add('hidden');
-  }
-}
-function dismissBackupBanner(){
-  bannerDismissed=true;
-  updateBackupBanner();
 }
 
 /* ===== 数据导入导出 ===== */
@@ -2611,6 +2829,8 @@ let timerState = {
   remainingSeconds: 0,
   elapsedSeconds: 0,
   effectiveSeconds: 0, // 有效计时（扣除暂停）
+  sessionSeconds: 0, // 会话累计有效秒（含继续计时合并）
+  sourceType: 'goal',
   isPaused: false,
   pauseRemaining: 0,
   isBreak: false,
@@ -2667,18 +2887,23 @@ function renderStudy(){
 function renderGoalDurations(){
   const container=document.getElementById('goalDurationList');
   if(!container) return;
-  if(state.goals.length===0){
+  const sources=[
+    ...state.goals.map(g=>({id:g.id,name:g.name,color:g.color,tag:''})),
+    ...(state.todos||[]).map(t=>({id:t.id,name:t.name,color:t.color,tag:'待办'}))
+  ];
+  if(sources.length===0){
     container.innerHTML='<div style="font-size:13px;color:var(--text3);text-align:center;padding:12px">暂无目标，请先在「今日」创建</div>';
     return;
   }
-  container.innerHTML=state.goals.map(g=>`
+  container.innerHTML=sources.map(s=>`
     <div class="goal-duration-item">
       <div class="gdi-name">
-        <span class="gdi-dot" style="background:${g.color}"></span>
-        <span>${escapeHtml(g.name)}</span>
+        <span class="gdi-dot" style="background:${s.color}"></span>
+        <span>${escapeHtml(s.name)}</span>
+        ${s.tag?`<span class="gdi-tag">${s.tag}</span>`:''}
       </div>
-      <input type="number" min="1" max="180" value="${studySettings.goalDurations[g.id]||25}"
-        onchange="updateGoalDuration('${g.id}',this.value)">
+      <input type="number" min="1" max="180" value="${studySettings.goalDurations[s.id]||25}"
+        onchange="updateGoalDuration('${s.id}',this.value)">
     </div>
   `).join('');
 }
@@ -2727,43 +2952,146 @@ function closeGoalSelect(){
   document.getElementById('goalSelectOverlay').classList.add('hidden');
 }
 
-function renderGoalSelectList(){
-  const container=document.getElementById('goalSelectList');
-  container.innerHTML=state.goals.filter(g=>!isCompleted(g)).map(g=>{
-    const dur=studySettings.goalDurations[g.id]||25;
-    return `
-      <div class="goal-select-item" onclick="selectGoalForTimer('${g.id}')">
-        <span class="gsi-dot" style="background:${g.color}"></span>
-        <div class="gsi-info">
-          <div class="gsi-name">${escapeHtml(g.name)}</div>
-          <div class="gsi-meta">${studySettings.timerMode==='countdown'?'倒计时 '+dur+' 分钟':'正计时'} · 剩余 ${getRemaining(g)}${g.unit}</div>
+// 新建待办弹窗
+function openNewTodoModal(){
+  closeGoalSelect(); // 先关闭待办选择弹窗
+  const html=`
+    <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:420px">
+        <div class="modal-header"><h3>新建待办</h3>
+          <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>
-        <svg class="gsi-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>待办名称</label>
+            <input type="text" id="newTodoName" placeholder="例如：复习高数第三章" maxlength="40">
+          </div>
+          <div style="font-size:12px;color:var(--text2);background:var(--warning-light);padding:8px 12px;border-radius:8px;line-height:1.6">普通待办只记录专注时长，仅显示在数据周报，不参与目标完成率与连续天数。</div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeModal()">取消</button>
+          <button class="btn btn-primary" onclick="saveNewTodo(false)">保存为普通待办</button>
+          <button class="btn btn-success" onclick="saveNewTodo(true)">添加到目标</button>
+        </div>
       </div>
-    `;
-  }).join('') || '<div class="goal-select-empty">所有目标已完成</div>';
+    </div>`;
+  document.getElementById('modalContainer').innerHTML=html;
+  setTimeout(()=>document.getElementById('newTodoName')?.focus(),100);
+}
+function saveNewTodo(addToGoal){
+  const name=(document.getElementById('newTodoName')?.value||'').trim();
+  if(!name){showToast('请输入待办名称','error');return;}
+  closeModal(); // 关闭新建待办弹窗
+  if(addToGoal){
+    // 跳转填写目标相关信息
+    openGoalModalWithName(name);
+    return;
+  }
+  if(!state.todos) state.todos=[];
+  state.todos.push({id:uid(),name,color:COLORS[state.todos.length%20],records:[]});
+  saveState();
+  showToast('已创建普通待办：'+name,'success');
+  render();
+}
+function openGoalModalWithName(name){
+  openGoalModal();
+  const nameEl=document.getElementById('goalName');
+  if(nameEl) nameEl.value=name;
 }
 
-function selectGoalForTimer(goalId){
-  const goal=state.goals.find(g=>g.id===goalId);
-  if(!goal) return;
+function renderGoalSelectList(){
+  const container=document.getElementById('goalSelectList');
+  let html='';
+  // 目标
+  state.goals.filter(g=>!isCompleted(g)).forEach(g=>{
+    const dur=studySettings.goalDurations[g.id]||25;
+    html+=`<div class="goal-select-item" onclick="selectSourceForTimer('goal','${g.id}')">
+      <span class="gsi-dot" style="background:${g.color}"></span>
+      <div class="gsi-info">
+        <div class="gsi-name">${escapeHtml(g.name)}</div>
+        <div class="gsi-meta">${studySettings.timerMode==='countdown'?'倒计时 '+dur+' 分钟':'正计时'} · 剩余 ${getRemaining(g)}${g.unit}</div>
+      </div>
+      <svg class="gsi-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      <button class="gsi-del" title="删除事项" onclick="event.stopPropagation();confirmRemoveSource('goal','${g.id}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      </button>
+    </div>`;
+  });
+  // 普通待办
+  (state.todos||[]).forEach(t=>{
+    html+=`<div class="goal-select-item" onclick="selectSourceForTimer('todo','${t.id}')">
+      <span class="gsi-dot" style="background:${t.color}"></span>
+      <div class="gsi-info">
+        <div class="gsi-name">${escapeHtml(t.name)}</div>
+        <div class="gsi-meta">待办 · 专注计时</div>
+      </div>
+      <svg class="gsi-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      <button class="gsi-del" title="删除事项" onclick="event.stopPropagation();confirmRemoveSource('todo','${t.id}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      </button>
+    </div>`;
+  });
+  if(!html) html='<div class="goal-select-empty">暂无可计时的事项，请先新建</div>';
+  html+=`<div class="goal-select-footer">
+    <button class="btn btn-primary btn-sm btn-block" onclick="openNewTodoModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      新建待办
+    </button>
+  </div>`;
+  container.innerHTML=html;
+}
+
+function selectSourceForTimer(type,id){
+  const source=findSource(type,id);
+  if(!source) return;
   closeGoalSelect();
-  startTimer(goal);
+  startTimer(source,type);
+}
+
+// 删除计时事项（目标/待办），记录保留到 trash
+function confirmRemoveSource(type,id){
+  const src=findSource(type,id);
+  if(!src) return;
+  showConfirm('删除事项',`确定删除「${src.name}」吗？该事项将从计时与设置中移除，其数据记录将保留在周报与最近记录中。`,()=>{
+    removeSource(type,id);
+  });
+}
+function removeSource(type,id){
+  const src=findSource(type,id);
+  if(!src) return;
+  if(!state.trash) state.trash=[];
+  const rec={id:id,name:src.name,unit:src.unit||'',color:src.color,type:type,records:(src.records||[]).slice()};
+  const ex=state.trash.find(x=>x.id===id);
+  if(ex){ ex.records=ex.records.concat(rec.records); }
+  else { state.trash.push(rec); }
+  if(type==='todo'){ state.todos=(state.todos||[]).filter(x=>x.id!==id); }
+  else { state.goals=state.goals.filter(x=>x.id!==id); }
+  if(timerState.active && timerState.goalId===id){
+    cleanupTimer();
+    document.getElementById('timerOverlay').classList.add('hidden');
+  }
+  saveState();
+  render();
+  if(!document.getElementById('goalSelectOverlay').classList.contains('hidden')){
+    renderGoalSelectList();
+  }
 }
 
 // 开始计时
-function startTimer(goal){
-  const duration=studySettings.goalDurations[goal.id]||25;
+function startTimer(source, type){
+  const duration=studySettings.goalDurations[source.id]||25;
   timerState={
     active:true,
-    goalId:goal.id,
-    goalName:goal.name,
-    goalColor:goal.color,
+    sourceType:type,
+    goalId:source.id,
+    goalName:source.name,
+    goalColor:source.color,
     mode:studySettings.timerMode,
     totalSeconds:duration*60,
     remainingSeconds:duration*60,
     elapsedSeconds:0,
     effectiveSeconds:0,
+    sessionSeconds:0,
     isPaused:false,
     pauseRemaining:0,
     isBreak:false,
@@ -2773,7 +3101,7 @@ function startTimer(goal){
     breakIntervalId:null,
   };
 
-  document.getElementById('timerGoalName').textContent=goal.name;
+  document.getElementById('timerGoalName').textContent=source.name;
   document.getElementById('timerSubDisplay').textContent='';
   document.getElementById('timerOverlay').classList.remove('hidden');
 
@@ -2784,10 +3112,10 @@ function startTimer(goal){
 function timerTick(){
   if(timerState.isPaused||timerState.isBreak) return;
 
+  timerState.elapsedSeconds++;
+  timerState.sessionSeconds++;
   if(timerState.mode==='countdown'){
     timerState.remainingSeconds--;
-    timerState.elapsedSeconds++;
-    timerState.effectiveSeconds++;
     if(timerState.remainingSeconds<=0){
       timerState.remainingSeconds=0;
       updateTimerDisplay();
@@ -2795,9 +3123,7 @@ function timerTick(){
       return;
     }
   }else{
-    timerState.elapsedSeconds++;
-    timerState.effectiveSeconds++;
-    if(timerState.elapsedSeconds>=timerState.totalSeconds){
+    if(timerState.totalSeconds>0 && timerState.elapsedSeconds>=timerState.totalSeconds){
       updateTimerDisplay();
       completeTimer();
       return;
@@ -2860,8 +3186,8 @@ function pauseTimer(){
 // 结束计时
 function endTimer(){
   if(!timerState.active) return;
-  const recordedMin = timerState.effectiveSeconds>0 ? Math.max(1,Math.round(timerState.effectiveSeconds/60)) : 0;
-  if(timerState.effectiveSeconds>0){
+  const recordedMin = roundUpMinutes(timerState.sessionSeconds);
+  if(timerState.sessionSeconds>0){
     recordStudyTime();
   }
   cleanupTimer();
@@ -2873,12 +3199,17 @@ function endTimer(){
 // 计时完成（倒计时到0）
 function completeTimer(){
   if(timerState.intervalId){clearInterval(timerState.intervalId);timerState.intervalId=null;}
-  // 记录有效时长
-  if(timerState.effectiveSeconds>0){
-    recordStudyTime();
-  }
-  // 弹出休息确认
+  // 不立即记录；等用户选择「休息 / 继续计时 / 暂不休息」后，按合并总时长统一取整记录
   document.getElementById('breakConfirmOverlay').classList.remove('hidden');
+}
+
+// 继续计时：接续正计时，两次计时合并后统一执行向上取整
+function continueTimer(){
+  document.getElementById('breakConfirmOverlay').classList.add('hidden');
+  timerState.mode='stopwatch';
+  timerState.totalSeconds=0; // 正计时无上限，由用户手动结束
+  updateTimerDisplay();
+  timerState.intervalId=setInterval(timerTick,1000);
 }
 
 function startBreak(){
@@ -2901,7 +3232,10 @@ function startBreak(){
 
 function skipBreak(){
   document.getElementById('breakConfirmOverlay').classList.add('hidden');
-  const recordedMin = timerState.effectiveSeconds>0 ? Math.max(1,Math.round(timerState.effectiveSeconds/60)) : 0;
+  const recordedMin = roundUpMinutes(timerState.sessionSeconds);
+  if(timerState.sessionSeconds>0){
+    recordStudyTime();
+  }
   cleanupTimer();
   document.getElementById('timerOverlay').classList.add('hidden');
   showToast('计时完成！已记录 '+recordedMin+' 分钟','success');
@@ -2909,6 +3243,9 @@ function skipBreak(){
 }
 
 function finishBreak(){
+  if(timerState.sessionSeconds>0){
+    recordStudyTime();
+  }
   cleanupTimer();
   document.getElementById('timerOverlay').classList.add('hidden');
   showToast('休息结束，计时完成！','success');
@@ -2926,11 +3263,12 @@ function cleanupTimer(){
 
 // 记录学习时长到目标
 function recordStudyTime(){
-  const goal=state.goals.find(g=>g.id===timerState.goalId);
-  if(!goal) return;
-  const minutes=Math.max(1,Math.round(timerState.effectiveSeconds/60));
-  // 添加一条记录，amount设为0（不影响进度），只记录分钟数
-  goal.records.push({
+  const source=findSource(timerState.sourceType||'goal', timerState.goalId);
+  if(!source) return;
+  const minutes=roundUpMinutes(timerState.sessionSeconds);
+  if(minutes<=0) return;
+  // 添加一条记录，amount设为0（不影响目标进度），只记录专注分钟数
+  source.records.push({
     id:uid(),
     date:todayStr(),
     amount:0,
@@ -2974,6 +3312,7 @@ if(location.search.indexOf('reset=1')>=0){
   state=loadState();
 }
 initExamples();
+archiveCompletedGoals();
 initSidebarState();
 initCloudConfig();
 // 异步延迟执行渲染，释放主线程，避免页面加载卡死
