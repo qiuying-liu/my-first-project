@@ -650,8 +650,8 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 .break-confirm-icon svg{width:32px;height:32px}
 .break-confirm-box h3{font-size:20px;font-weight:700;margin-bottom:8px;color:var(--text)}
 .break-confirm-box p{font-size:14px;color:var(--text2);margin-bottom:28px}
-.break-confirm-actions{display:flex;gap:12px;justify-content:center}
-.break-confirm-actions .btn{min-width:120px}
+.break-confirm-actions{display:flex;gap:10px;justify-content:center;width:100%}
+.break-confirm-actions .btn{flex:1;min-width:0;padding:10px 8px;white-space:nowrap}
 
 /* 目标选择弹窗 */
 .goal-select-overlay{
@@ -685,9 +685,13 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 .goal-select-item:hover .gsi-del{opacity:1}
 .gsi-del:hover{background:var(--danger-light);color:var(--danger)}
 .gsi-del svg{width:14px;height:14px}
+.edit-del{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:8px;color:var(--danger);background:var(--danger-light);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+.edit-del:hover{background:var(--danger);color:#fff}
+.edit-del svg{width:14px;height:14px}
 .goal-select-empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:14px}
-.goal-select-footer{padding:12px;border-top:1px solid var(--border-light)}
-.goal-select-footer .btn{width:100%}
+.goal-select-footer{display:flex;gap:10px;padding:14px 12px;border-top:1px solid var(--border-light)}
+.goal-select-footer .btn-new{flex:0 0 calc(75% - 5px);min-width:0;box-sizing:border-box;min-height:46px;font-size:14px}
+.goal-select-footer .btn-edit{flex:0 0 calc(25% - 5px);min-width:0;white-space:nowrap;box-sizing:border-box;min-height:46px;font-size:14px}
 </style>
 </head>
 <body>
@@ -984,7 +988,7 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
               测试连接
             </button>
-            <button class="btn btn-primary btn-sm" onclick="uploadToCloud()">
+            <button class="btn btn-primary btn-sm" onclick="confirmUploadToCloud()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
               上传到云端
             </button>
@@ -2555,7 +2559,7 @@ function confirmDeleteGoal(goalId){
 }
 
 /* ===== 通用确认框 ===== */
-function showConfirm(title,message,onConfirm){
+function showConfirm(title,message,onConfirm,confirmText,confirmClass){
   const html=`
     <div class="modal-overlay" style="z-index:650" onclick="if(event.target===this)closeModal()">
       <div class="modal" style="max-width:380px">
@@ -2570,7 +2574,7 @@ function showConfirm(title,message,onConfirm){
         </div>
         <div class="modal-footer">
           <button class="btn btn-outline" onclick="closeModal()">取消</button>
-          <button class="btn btn-danger" id="confirmBtn">确认删除</button>
+          <button class="btn ${confirmClass||'btn-danger'}" id="confirmBtn">${confirmText||'确认删除'}</button>
         </div>
       </div>
     </div>
@@ -2674,6 +2678,11 @@ function initCloudConfig(){
   if(cfg.lastSync) setCloudStatus('上次同步：'+cfg.lastSync);
 }
 
+function confirmUploadToCloud(){
+  const cfg=getCloudConfig();
+  if(!cfg.token){ showToast('请先填写 GitHub Token','error'); return; }
+  showConfirm('确认上传','请确认当前是【最新版本】的数据。确认后数据将覆盖云端，继续上传吗？',()=>{ uploadToCloud(); },'确认','btn-primary');
+}
 async function uploadToCloud(){
   const cfg=getCloudConfig();
   if(!cfg.token){ showToast('请先填写 GitHub Token','error'); return; }
@@ -2749,7 +2758,7 @@ async function downloadFromCloud(){
       localStorage.setItem(CLOUD_KEY,JSON.stringify(cfg));
       setCloudStatus('上次同步：下载于 '+now,'var(--success)');
       showToast('已从云端恢复数据','success');
-    });
+    },'确认','btn-primary');
   }catch(e){
     setCloudStatus('下载失败：'+e.message,'var(--danger)');
     showToast('下载失败：'+e.message,'error');
@@ -3071,10 +3080,6 @@ function renderGoalSelectList(){
         <div class="gsi-name">${escapeHtml(g.name)}</div>
         <div class="gsi-meta">${studySettings.timerMode==='countdown'?'倒计时 '+dur+' 分钟':'正计时'} · 剩余 ${getRemaining(g)}${g.unit}</div>
       </div>
-      <svg class="gsi-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      <button class="gsi-del" title="删除事项" onclick="event.stopPropagation();confirmRemoveSource('goal','${g.id}')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-      </button>
     </div>`;
   });
   // 普通待办
@@ -3085,20 +3090,56 @@ function renderGoalSelectList(){
         <div class="gsi-name">${escapeHtml(t.name)}</div>
         <div class="gsi-meta">待办 · 专注计时</div>
       </div>
-      <svg class="gsi-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      <button class="gsi-del" title="删除事项" onclick="event.stopPropagation();confirmRemoveSource('todo','${t.id}')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-      </button>
     </div>`;
   });
   if(!html) html='<div class="goal-select-empty">暂无可计时的事项，请先新建</div>';
   html+=`<div class="goal-select-footer">
-    <button class="btn btn-primary btn-sm btn-block" onclick="openNewTodoModal()">
+    <button class="btn btn-primary btn-sm btn-new" onclick="openNewTodoModal()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       新建待办
     </button>
+    <button class="btn btn-outline btn-sm btn-edit" onclick="openEditSourceModal()">编辑</button>
   </div>`;
   container.innerHTML=html;
+}
+
+function openEditSourceModal(){
+  let rows='';
+  state.goals.filter(g=>!isCompleted(g)).forEach(g=>{
+    rows+=`<div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border-light)">
+      <span style="width:12px;height:12px;border-radius:50%;background:${g.color};flex-shrink:0"></span>
+      <span style="flex:1;min-width:0;font-size:14px;font-weight:600">${escapeHtml(g.name)}</span>
+      <span style="font-size:12px;color:var(--text3);flex-shrink:0">目标</span>
+      <button class="edit-del" title="删除" onclick="confirmRemoveSource('goal','${g.id}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        <span>删除</span>
+      </button>
+    </div>`;
+  });
+  (state.todos||[]).forEach(t=>{
+    rows+=`<div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border-light)">
+      <span style="width:12px;height:12px;border-radius:50%;background:${t.color};flex-shrink:0"></span>
+      <span style="flex:1;min-width:0;font-size:14px;font-weight:600">${escapeHtml(t.name)}</span>
+      <span style="font-size:12px;color:var(--text3);flex-shrink:0">待办</span>
+      <button class="edit-del" title="删除" onclick="confirmRemoveSource('todo','${t.id}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        <span>删除</span>
+      </button>
+    </div>`;
+  });
+  if(!rows) rows='<div style="color:var(--text3);font-size:13px;text-align:center;padding:24px 0">暂无可编辑的事项</div>';
+  document.getElementById('modalContainer').innerHTML=`
+    <div class="modal-overlay" style="z-index:600" onclick="if(event.target===this)closeModal()">
+      <div class="modal" style="max-width:420px">
+        <div class="modal-header"><h3>编辑事项</h3>
+          <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="modal-body" style="max-height:60vh;overflow-y:auto">${rows}</div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeModal()">关闭</button>
+        </div>
+      </div>
+    </div>`;
 }
 
 function selectSourceForTimer(type,id){
@@ -3114,6 +3155,7 @@ function confirmRemoveSource(type,id){
   if(!src) return;
   showConfirm('删除事项',`确定删除「${src.name}」吗？该事项将从计时与设置中移除，其数据记录将保留在周报与最近记录中。`,()=>{
     removeSource(type,id);
+    if(document.getElementById('modalContainer').innerHTML.includes('编辑事项')) openEditSourceModal();
   });
 }
 function removeSource(type,id){
@@ -3130,6 +3172,8 @@ function removeSource(type,id){
     cleanupTimer();
     document.getElementById('timerOverlay').classList.add('hidden');
   }
+  delete studySettings.goalDurations[id];
+  saveStudySettings();
   saveState();
   render();
   if(!document.getElementById('goalSelectOverlay').classList.contains('hidden')){
