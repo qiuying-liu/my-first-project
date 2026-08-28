@@ -399,20 +399,20 @@ input:focus,select:focus,textarea:focus,button:focus{outline:2px solid #7EB8D9;o
 }
 .modal{
   background:var(--card);border-radius:18px;width:100%;max-width:480px;
-  max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);
+  max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow-lg);
   animation:modalIn .25s ease;
 }
 @keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .modal-header{
   padding:20px 24px 16px;border-bottom:1px solid var(--border-light);
-  display:flex;align-items:center;justify-content:space-between;
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
 }
 .modal-header h3{font-size:17px;font-weight:700}
 .modal-close{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text3);transition:all .2s}
 .modal-close:hover{background:var(--bg);color:var(--text)}
 .modal-close svg{width:18px;height:18px}
-.modal-body{padding:20px 24px}
-.modal-footer{padding:16px 24px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border-light)}
+.modal-body{padding:20px 24px;overflow-y:auto;flex:1;min-height:0}
+.modal-footer{padding:16px 24px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border-light);flex-shrink:0}
 
 .form-group{margin-bottom:16px}
 .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text)}
@@ -1284,13 +1284,30 @@ function createDefaultState(){
   return {version:3,goals:[],todos:[],achievements:[],trash:[],weeklyNotes:{},createdAt:todayStr()};
 }
 
+let _saveTimer = null;
 function saveState(){
+  if(_saveTimer) clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(()=>{
+    _saveTimer = null;
+    _doSaveState();
+  }, 300);
+}
+function _doSaveState(){
   try{
     localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
   }catch(e){
     showToast('保存失败：'+e.message,'error');
   }
 }
+function flushSaveState(){
+  if(_saveTimer){
+    clearTimeout(_saveTimer);
+    _saveTimer = null;
+    _doSaveState();
+  }
+}
+window.addEventListener('beforeunload', flushSaveState);
+window.addEventListener('pagehide', flushSaveState);
 
 /* ===== 示例数据（已停用，不再自动创建） ===== */
 function initExamples(){
