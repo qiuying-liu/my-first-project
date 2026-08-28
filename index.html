@@ -2344,7 +2344,7 @@ function openBackfillModal(goalId){
   
   const html=`
     <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
-      <div class="modal">
+      <div class="modal" style="align-self:center;margin:auto;border-radius:18px">
         <div class="modal-header">
           <h3>补记打卡 - ${escapeHtml(goal.name)}</h3>
           <button class="modal-close" onclick="closeModal()">
@@ -3026,7 +3026,7 @@ function openNewTodoModal(){
   closeGoalSelect(); // 先关闭待办选择弹窗
   const html=`
     <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
-      <div class="modal" style="max-width:420px">
+      <div class="modal" style="max-width:420px;align-self:center;margin:auto;border-radius:18px">
         <div class="modal-header"><h3>新建待办</h3>
           <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>
@@ -3037,10 +3037,9 @@ function openNewTodoModal(){
           </div>
           <div style="font-size:12px;color:var(--text2);background:var(--warning-light);padding:8px 12px;border-radius:8px;line-height:1.6">普通待办只记录专注时长，仅显示在数据周报，不参与目标完成率与连续天数。</div>
         </div>
-        <div class="modal-footer">
-          <button class="btn btn-outline" onclick="closeModal()">取消</button>
-          <button class="btn btn-primary" onclick="saveNewTodo(false)">保存为普通待办</button>
-          <button class="btn btn-success" onclick="saveNewTodo(true)">添加到目标</button>
+        <div class="modal-footer" style="display:flex;gap:10px">
+          <button class="btn btn-primary" style="flex:1" onclick="saveNewTodo(false)">保存为普通待办</button>
+          <button class="btn btn-success" style="flex:1" onclick="saveNewTodo(true)">添加到目标</button>
         </div>
       </div>
     </div>`;
